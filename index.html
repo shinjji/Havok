@@ -557,7 +557,8 @@ body::before {
   color: var(--text);
   font-family: 'Oswald', sans-serif;
   font-size: 14px;
-  padding: 8px 12px;
+  padding: 0 12px;
+  height: 36px;
   outline: none;
   transition: border-color 0.15s;
 }
@@ -815,20 +816,25 @@ body::before {
 .random-controls .form-group { margin-bottom: 0; flex: 1; min-width: 160px; }
 
 .btn-generate {
-  font-family: 'Bangers', cursive;
-  font-size: 20px;
-  letter-spacing: 3px;
+  font-family: 'Black Ops One', cursive;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   background: var(--gold);
   color: #000;
-  border: none;
-  padding: 10px 28px;
+  border: 2px solid transparent;
+  padding: 0 24px;
+  height: 36px;
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
   flex-shrink: 0;
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
 }
 
-.btn-generate:hover { background: var(--yellow); transform: translateY(-1px); }
+.btn-generate:hover { background: var(--yellow); }
 
 .random-list {
   background: var(--card);
@@ -1109,7 +1115,7 @@ body::before {
         <input class="form-input" type="number" id="r-points" value="500" min="1" step="1">
       </div>
       <button class="btn-generate" id="r-generate-btn">⚡ GENERATE LISTS</button>
-      <button class="btn-danger" style="flex-shrink:0;width:auto;padding:10px 18px;" id="r-reset-btn">Reset</button>
+      <button class="btn-danger" style="flex-shrink:0;width:auto;padding:0 18px;height:36px;align-self:flex-end;display:inline-flex;align-items:center;" id="r-reset-btn">Reset</button>
     </div>
 
     <div class="random-layout">
