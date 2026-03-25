@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HAVOK</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Black+Ops+One&family=Oswald:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0d0d0d;
+  --surface:   #141414;
+  --card:      #1a1a1a;
+  --border:    #2a2a2a;
+  --karn:      #c0392b;
+  --karn-lt:   #e74c3c;
+  --karn-glow: rgba(192,57,43,0.35);
+  --nexus:     #1a5276;
+  --nexus-lt:  #2e86c1;
+  --nexus-glow:rgba(30,82,118,0.35);
+  --ptero:     #1e8449;
+  --gold:      #d4ac0d;
+  --yellow:    #f39c12;
+  --text:      #e8e8e8;
+  --muted:     #777;
+  --ink:       #000;
+  --accent:    #c0392b;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Oswald', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Diamond plate background texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 12px),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 12px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===================== MASTHEAD ===================== */
+.masthead {
+  position: relative;
+  z-index: 10;
+  background: #0a0a0a;
+  border-bottom: 4px solid var(--karn);
+  padding: 0;
+  overflow: hidden;
+}
+
+.masthead::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(192,57,43,0.07) 0px, rgba(192,57,43,0.07) 2px,
+    transparent 2px, transparent 40px
+  );
+}
+
+.masthead-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.masthead-logo {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(48px, 8vw, 80px);
+  line-height: 1;
+  letter-spacing: 6px;
+  color: var(--karn);
+  text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,
+    5px 5px 0 rgba(0,0,0,0.5);
+  flex-shrink: 0;
+}
+
+.masthead-tagline {
+  font-family: 'Black Ops One', cursive;
+  font-size: clamp(9px, 1.5vw, 13px);
+  letter-spacing: 3px;
+  color: var(--muted);
+  text-transform: uppercase;
+  line-height: 1.6;
+  border-left: 3px solid var(--karn);
+  padding-left: 14px;
+}
+
+.masthead-tagline strong {
+  display: block;
+  color: var(--yellow);
+  font-size: clamp(11px, 1.8vw, 15px);
+}
+
+/* ===================== NAV ===================== */
+.nav {
+  position: relative;
+  z-index: 10;
+  background: #111;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  overflow-x: auto;
+}
+
+.nav-btn {
+  font-family: 'Black Ops One', cursive;
+  font-size: clamp(10px, 1.8vw, 13px);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border);
+  border-bottom: 3px solid transparent;
+  padding: 14px 22px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.nav-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+.nav-btn.active {
+  color: var(--karn-lt);
+  border-bottom-color: var(--karn);
+  background: rgba(192,57,43,0.08);
+}
+
+/* ===================== MAIN CONTENT ===================== */
+.main {
+  position: relative;
+  z-index: 5;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.tab { display: none; }
+.tab.active { display: block; }
+
+/* ===================== SECTION HEADER ===================== */
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(28px, 5vw, 48px);
+  letter-spacing: 4px;
+  color: var(--text);
+  text-shadow: 2px 2px 0 var(--karn), 4px 4px 0 rgba(0,0,0,0.5);
+  line-height: 1;
+}
+
+.section-rule {
+  flex: 1;
+  height: 3px;
+  background: linear-gradient(90deg, var(--karn), transparent);
+}
+
+/* ===================== FACTION BADGE ===================== */
+.faction-karn   { color: var(--karn-lt); }
+.faction-nexus  { color: var(--nexus-lt); }
+.faction-ptero  { color: #27ae60; }
+
+.badge {
+  font-family: 'Black Ops One', cursive;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 3px 10px;
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.badge-karn   { color: var(--karn-lt);  border-color: var(--karn);  background: rgba(192,57,43,0.15); }
+.badge-nexus  { color: var(--nexus-lt); border-color: var(--nexus); background: rgba(26,82,118,0.15); }
+.badge-ptero  { color: #27ae60;         border-color: var(--ptero); background: rgba(30,132,73,0.15); }
+
+/* ===================== COLLECTION GRID ===================== */
+.collection-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-btn {
+  font-family: 'Black Ops One', cursive;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: transparent;
+  border: 2px solid var(--border);
+  color: var(--muted);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+}
+
+.filter-btn:hover { border-color: var(--muted); color: var(--text); }
+.filter-btn.active { border-color: var(--karn); color: var(--karn-lt); background: rgba(192,57,43,0.12); }
+.filter-btn.f-nexus.active { border-color: var(--nexus-lt); color: var(--nexus-lt); background: rgba(46,134,193,0.12); }
+
+.unit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.unit-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  animation: cardIn 0.3s ease both;
+  position: relative;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.unit-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--karn);
+  transition: opacity 0.15s;
+  opacity: 0;
+  z-index: 1;
+}
+
+.unit-card.nexus-card::before { background: var(--nexus-lt); }
+.unit-card.ptero-card::before { background: var(--ptero); }
+
+.unit-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--karn);
+  box-shadow: 0 6px 24px var(--karn-glow);
+}
+
+.unit-card.nexus-card:hover { border-color: var(--nexus-lt); box-shadow: 0 6px 24px var(--nexus-glow); }
+.unit-card:hover::before { opacity: 1; }
+
+.card-img-wrap {
+  position: relative;
+  aspect-ratio: 1;
+  background: #111;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s;
+}
+
+.unit-card:hover .card-img-wrap img { transform: scale(1.04); }
+
+.card-img-placeholder {
+  font-family: 'Bangers', cursive;
+  font-size: 48px;
+  color: rgba(255,255,255,0.06);
+  letter-spacing: 4px;
+}
+
+.card-code {
+  position: absolute;
+  top: 8px; left: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  background: rgba(0,0,0,0.8);
+  color: var(--gold);
+  padding: 2px 6px;
+  border: 1px solid var(--gold);
+  z-index: 2;
+}
+
+.card-qty {
+  position: absolute;
+  top: 8px; right: 8px;
+  font-family: 'Black Ops One', cursive;
+  font-size: 11px;
+  background: rgba(0,0,0,0.8);
+  color: var(--text);
+  padding: 2px 7px;
+  z-index: 2;
+}
+
+.card-info {
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--border);
+}
+
+.card-name {
+  font-family: 'Black Ops One', cursive;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-br {
+  font-family: 'Bangers', cursive;
+  font-size: 20px;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.card-br-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ===================== LIGHTBOX ===================== */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.lightbox.open { display: flex; }
+
+.lb-inner {
+  background: var(--card);
+  border: 3px solid var(--border);
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: lbIn 0.2s ease;
+}
+
+@keyframes lbIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.lb-close {
+  position: absolute;
+  top: 12px; right: 12px;
+  font-family: 'Black Ops One', cursive;
+  font-size: 12px;
+  letter-spacing: 1px;
+  background: var(--karn);
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.lb-header {
+  background: #0a0a0a;
+  padding: 20px 24px;
+  border-bottom: 3px solid var(--karn);
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.lb-header.nexus { border-bottom-color: var(--nexus-lt); }
+
+.lb-code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 3px 8px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.lb-name {
+  font-family: 'Bangers', cursive;
+  font-size: 36px;
+  letter-spacing: 3px;
+  line-height: 1;
+  color: var(--text);
+}
+
+.lb-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+@media (max-width: 600px) { .lb-body { grid-template-columns: 1fr; } }
+
+.lb-images {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #111;
+  border-right: 1px solid var(--border);
+}
+
+.lb-images img {
+  width: 100%;
+  border: 1px solid var(--border);
+  display: block;
+}
+
+.lb-stats {
+  padding: 20px 24px;
+}
+
+.lb-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.lb-stat-label {
+  font-family: 'Black Ops One', cursive;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.lb-stat-val {
+  font-family: 'Bangers', cursive;
+  font-size: 22px;
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+
+.lb-limits {
+  margin-top: 16px;
+  background: #111;
+  border: 1px solid var(--border);
+  padding: 12px;
+}
+
+.lb-limits-title {
+  font-family: 'Black Ops One', cursive;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.lb-limit-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  padding: 3px 0;
+}
+
+.lb-limit-row span:last-child { color: var(--text); font-weight: bold; }
+
+/* ===================== BATTLE BUILDER ===================== */
+.builder-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 900px) { .builder-layout { grid-template-columns: 1fr; } }
+
+.builder-panel {
+  background: var(--card);
+  border: 2px solid var(--border);
+  padding: 20px;
+  position: sticky;
+  top: 20px;
+}
+
+.builder-panel-title {
+  font-family: 'Bangers', cursive;
+  font-size: 24px;
+  letter-spacing: 3px;
+  color: var(--text);
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.form-group { margin-bottom: 14px; }
+
+.form-label {
+  font-family: 'Black Ops One', cursive;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.form-input, .form-select {
+  width: 100%;
+  background: #111;
+  border: 2px solid var(--border);
+  color: var(--text);
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.form-input:focus, .form-select:focus { border-color: var(--karn); }
+.form-select option { background: #111; }
+
+.btn-primary {
+  width: 100%;
+  font-family: 'Bangers', cursive;
+  font-size: 20px;
+  letter-spacing: 3px;
+  background: var(--karn);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+.btn-primary:hover { background: var(--karn-lt); }
+.btn-primary:active { transform: translateY(1px); }
+.btn-primary.nexus-btn { background: var(--nexus); }
+.btn-primary.nexus-btn:hover { background: var(--nexus-lt); }
+
+.btn-danger {
+  width: 100%;
+  font-family: 'Black Ops One', cursive;
+  font-size: 11px;
+  letter-spacing: 2px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 6px;
+}
+
+.btn-danger:hover { border-color: var(--karn); color: var(--karn-lt); }
+
+/* Points meter */
+.points-meter {
+  margin: 16px 0;
+}
+
+.points-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.points-current {
+  font-family: 'Bangers', cursive;
+  font-size: 36px;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.points-limit {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.meter-bar {
+  height: 6px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--karn), var(--yellow));
+  transition: width 0.3s ease;
+  max-width: 100%;
+}
+
+.meter-fill.over { background: #e74c3c; }
+.meter-fill.nexus-fill { background: linear-gradient(90deg, var(--nexus), var(--nexus-lt)); }
+
+.points-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* Roster list */
+.roster-section { }
+
+.roster-unit-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--karn);
+  margin-bottom: 8px;
+  animation: cardIn 0.2s ease both;
+}
+
+.roster-unit-row.nexus-row { border-left-color: var(--nexus-lt); }
+
+.roster-unit-name {
+  font-family: 'Black Ops One', cursive;
+  font-size: 12px;
+  letter-spacing: 1px;
+  flex: 1;
+  line-height: 1.3;
+}
+
+.roster-unit-code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.qty-btn {
+  font-family: 'Bangers', cursive;
+  font-size: 18px;
+  line-height: 1;
+  width: 28px;
+  height: 28px;
+  background: #111;
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty-btn:hover { border-color: var(--karn); color: var(--karn-lt); background: rgba(192,57,43,0.1); }
+.qty-btn.nexus-btn-sm:hover { border-color: var(--nexus-lt); color: var(--nexus-lt); background: rgba(46,134,193,0.1); }
+
+.qty-val {
+  font-family: 'Bangers', cursive;
+  font-size: 22px;
+  color: var(--text);
+  min-width: 24px;
+  text-align: center;
+  line-height: 1;
+}
+
+.roster-cost {
+  font-family: 'Bangers', cursive;
+  font-size: 16px;
+  color: var(--gold);
+  flex-shrink: 0;
+  min-width: 48px;
+  text-align: right;
+}
+
+.roster-limit-warn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--karn-lt);
+  flex-shrink: 0;
+}
+
+.roster-empty {
+  font-family: 'Black Ops One', cursive;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-align: center;
+  padding: 40px;
+  border: 2px dashed var(--border);
+}
+
+/* Unit selector for builder */
+.unit-selector {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.selector-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.selector-row:hover { border-color: var(--karn); background: rgba(192,57,43,0.06); }
+.selector-row.nexus-selector:hover { border-color: var(--nexus-lt); background: rgba(46,134,193,0.06); }
+.selector-row.maxed { opacity: 0.4; cursor: not-allowed; }
+
+.selector-name {
+  font-family: 'Black Ops One', cursive;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  flex: 1;
+  line-height: 1.3;
+}
+
+.selector-detail {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.selector-add {
+  font-family: 'Bangers', cursive;
+  font-size: 16px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.selector-row:not(.maxed):hover .selector-add { color: var(--karn-lt); }
+.selector-row.nexus-selector:not(.maxed):hover .selector-add { color: var(--nexus-lt); }
+
+/* ===================== RANDOM LISTS ===================== */
+.random-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 900px) { .random-layout { grid-template-columns: 1fr; } }
+
+.random-controls {
+  background: var(--card);
+  border: 2px solid var(--border);
+  padding: 20px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.random-controls .form-group { margin-bottom: 0; flex: 1; min-width: 160px; }
+
+.btn-generate {
+  font-family: 'Bangers', cursive;
+  font-size: 20px;
+  letter-spacing: 3px;
+  background: var(--gold);
+  color: #000;
+  border: none;
+  padding: 10px 28px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-generate:hover { background: var(--yellow); transform: translateY(-1px); }
+
+.random-list {
+  background: var(--card);
+  border: 2px solid var(--border);
+  overflow: hidden;
+}
+
+.random-list-header {
+  padding: 14px 18px;
+  background: #0a0a0a;
+  border-bottom: 3px solid var(--karn);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.random-list-header.nexus { border-bottom-color: var(--nexus-lt); }
+
+.random-list-title {
+  font-family: 'Bangers', cursive;
+  font-size: 28px;
+  letter-spacing: 3px;
+}
+
+.random-list-pts {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--gold);
+}
+
+.random-list-body { padding: 16px; }
+
+.random-unit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  gap: 8px;
+}
+
+.random-unit-row:last-child { border-bottom: none; }
+
+.random-unit-name {
+  font-family: 'Black Ops One', cursive;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  flex: 1;
+}
+
+.random-unit-qty {
+  font-family: 'Bangers', cursive;
+  font-size: 18px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.random-unit-pts {
+  font-family: 'Bangers', cursive;
+  font-size: 18px;
+  color: var(--gold);
+  flex-shrink: 0;
+  min-width: 56px;
+  text-align: right;
+}
+
+.random-empty {
+  font-family: 'Black Ops One', cursive;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-align: center;
+  padding: 40px;
+}
+
+/* ===================== CONFIG ===================== */
+.config-panel {
+  max-width: 560px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  padding: 28px;
+}
+
+.config-section-title {
+  font-family: 'Black Ops One', cursive;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.config-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+.config-note a { color: var(--gold); }
+
+.config-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  padding: 10px 14px;
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  display: none;
+}
+
+.config-status.ok  { color: #27ae60; border-color: #27ae60; display: block; }
+.config-status.err { color: var(--karn-lt); border-color: var(--karn); display: block; }
+
+/* ===================== LOADING / ERROR ===================== */
+.load-state {
+  font-family: 'Black Ops One', cursive;
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: var(--muted);
+  text-align: center;
+  padding: 60px;
+  text-transform: uppercase;
+}
+
+.load-state.error { color: var(--karn-lt); }
+
+/* ===================== UTIL ===================== */
+.hidden { display: none !important; }
+
+.tier-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  padding: 2px 6px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: rgba(212,172,13,0.15);
+  color: var(--gold);
+  border: 1px solid rgba(212,172,13,0.3);
+  display: inline-block;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: var(--border); }
+::-webkit-scrollbar-thumb:hover { background: var(--karn); }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 600px) {
+  .main { padding: 14px; }
+  .unit-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .builder-panel { position: static; }
+}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-logo">HAVOK</div>
+    <div class="masthead-tagline">
+      <strong>A Savage Universe... A Brutal War!</strong>
+      Collection &amp; Battle Manager
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" data-tab="collection">⚔ Collection</button>
+  <button class="nav-btn" data-tab="builder">☠ Battle Builder</button>
+  <button class="nav-btn" data-tab="random">⚡ Random Rosters</button>
+  <button class="nav-btn" data-tab="config">⚙ Config</button>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ==================== COLLECTION TAB ==================== -->
+  <div class="tab active" id="tab-collection">
+    <div class="section-head">
+      <div class="section-title">COLLECTION</div>
+      <div class="section-rule"></div>
+      <div id="collection-total" class="tier-badge"></div>
+    </div>
+
+    <div class="collection-controls">
+      <button class="filter-btn active" data-faction="all">All Forces</button>
+      <button class="filter-btn" data-faction="Karn">Karn Empire</button>
+      <button class="filter-btn f-nexus" data-faction="Nexus">Nexus Rebellion</button>
+    </div>
+
+    <div id="collection-grid" class="unit-grid">
+      <div class="load-state">Loading force data...</div>
+    </div>
+  </div>
+
+  <!-- ==================== BATTLE BUILDER TAB ==================== -->
+  <div class="tab" id="tab-builder">
+    <div class="section-head">
+      <div class="section-title">BATTLE BUILDER</div>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="builder-layout">
+      <!-- Left panel: controls + roster -->
+      <div>
+        <div class="builder-panel">
+          <div class="builder-panel-title">FORCE CONFIG</div>
+
+          <div class="form-group">
+            <label class="form-label">Points Limit</label>
+            <input class="form-input" type="number" id="b-points" value="500" min="1" step="1">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Faction</label>
+            <select class="form-select" id="b-faction">
+              <option value="Karn">Karn Empire</option>
+              <option value="Nexus">Nexus Rebellion</option>
+            </select>
+          </div>
+
+          <div class="points-meter">
+            <div class="points-display">
+              <div>
+                <div class="points-current" id="b-pts-used">0</div>
+                <div class="points-label">BATTLE RATING SPENT</div>
+              </div>
+              <div style="text-align:right">
+                <div class="points-limit" id="b-pts-limit">/ 500</div>
+                <div class="tier-badge" id="b-tier-badge">Brigade</div>
+              </div>
+            </div>
+            <div class="meter-bar">
+              <div class="meter-fill" id="b-meter" style="width:0%"></div>
+            </div>
+          </div>
+
+          <button class="btn-danger" id="b-reset-btn">Reset Roster</button>
+        </div>
+
+        <!-- Roster -->
+        <div style="margin-top:16px;">
+          <div class="section-head" style="margin-bottom:12px;">
+            <div style="font-family:'Black Ops One',cursive;font-size:13px;letter-spacing:2px;color:var(--muted);">ACTIVE ROSTER</div>
+          </div>
+          <div id="b-roster">
+            <div class="roster-empty">No units deployed.<br>Select units from the right.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right panel: unit selector -->
+      <div>
+        <div style="font-family:'Black Ops One',cursive;font-size:11px;letter-spacing:2px;color:var(--muted);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);">
+          AVAILABLE UNITS — CLICK TO ADD
+        </div>
+        <div class="unit-selector" id="b-selector"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== RANDOM LISTS TAB ==================== -->
+  <div class="tab" id="tab-random">
+    <div class="section-head">
+      <div class="section-title">RANDOM ROSTERS</div>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="random-controls">
+      <div class="form-group">
+        <label class="form-label">Points Limit</label>
+        <input class="form-input" type="number" id="r-points" value="500" min="1" step="1">
+      </div>
+      <button class="btn-generate" id="r-generate-btn">⚡ GENERATE LISTS</button>
+      <button class="btn-danger" style="flex-shrink:0;width:auto;padding:10px 18px;" id="r-reset-btn">Reset</button>
+    </div>
+
+    <div class="random-layout">
+      <!-- Karn list -->
+      <div class="random-list">
+        <div class="random-list-header">
+          <div class="random-list-title faction-karn">KARN EMPIRE</div>
+          <div class="random-unit-pts" id="r-karn-total">— pts</div>
+        </div>
+        <div class="random-list-body" id="r-karn-list">
+          <div class="random-empty">Generate a list to deploy forces.</div>
+        </div>
+      </div>
+
+      <!-- Nexus list -->
+      <div class="random-list">
+        <div class="random-list-header nexus">
+          <div class="random-list-title faction-nexus">NEXUS REBELLION</div>
+          <div class="random-unit-pts" id="r-nexus-total">— pts</div>
+        </div>
+        <div class="random-list-body" id="r-nexus-list">
+          <div class="random-empty">Generate a list to deploy forces.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CONFIG TAB ==================== -->
+  <div class="tab" id="tab-config">
+    <div class="section-head">
+      <div class="section-title">CONFIG</div>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="config-panel">
+      <div class="config-section-title">Google Sheets Data Source</div>
+
+      <div class="form-group">
+        <label class="form-label">Sheet ID</label>
+        <input class="form-input" type="text" id="cfg-sheet-id" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms">
+        <div class="config-note">From your sheet URL: /spreadsheets/d/<strong style="color:var(--gold)">THIS_PART</strong>/edit</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">API Key</label>
+        <input class="form-input" type="password" id="cfg-api-key" placeholder="AIza...">
+        <div class="config-note">Google Cloud Console → APIs &amp; Services → Credentials</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Sheet Tab Name</label>
+        <input class="form-input" type="text" id="cfg-tab-name" placeholder="Sheet1">
+      </div>
+
+      <button class="btn-primary" id="cfg-save-btn">SAVE &amp; RELOAD</button>
+      <div class="config-status" id="cfg-status"></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <div class="lb-inner">
+    <button class="lb-close" id="lb-close-btn">✕ CLOSE</button>
+    <div class="lb-header" id="lb-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <div class="lb-code" id="lb-code"></div>
+          <div id="lb-badge" style="display:inline-flex;align-items:center;"></div>
+        </div>
+        <div class="lb-name" id="lb-name"></div>
+      </div>
+    </div>
+    <div class="lb-body">
+      <div class="lb-images" id="lb-images"></div>
+      <div class="lb-stats" id="lb-stats"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CONSTANTS & CONFIG
+// ============================================================
+const LS_CONFIG   = 'havok_cfg';
+const LS_BUILDER  = 'havok_builder';
+const LS_RANDOM   = 'havok_random';
+
+const TIER_LABELS  = ['Brigade', 'Division', 'Corps', 'Army'];
+const TIER_RANGES  = [[0,500],[501,1000],[1001,1500],[1501,Infinity]];
+const TIER_COLS    = ['g','h','i','j']; // col indices
+
+let COLLECTION = [];
+
+// ============================================================
+// UTILS
+// ============================================================
+function getConfig() {
+  try { return JSON.parse(localStorage.getItem(LS_CONFIG)) || {}; } catch { return {}; }
+}
+
+function saveConfig(obj) {
+  localStorage.setItem(LS_CONFIG, JSON.stringify(obj));
+}
+
+function getTier(pts) {
+  for (let i = 0; i < TIER_RANGES.length; i++) {
+    const [lo, hi] = TIER_RANGES[i];
+    if (pts >= lo && pts <= hi) return i;
+  }
+  return TIER_RANGES.length - 1;
+}
+
+function getLimit(unit, tierIdx) {
+  const limits = [unit.brigadeLimit, unit.divisionLimit, unit.corpsLimit, unit.armyLimit];
+  return limits[tierIdx] ?? 0;
+}
+
+function proxyImg(url) {
+  if (!url || !url.trim()) return '';
+  const match = url.match(/[-\w]{25,}/);
+  if (!match) return url;
+  return `https://wsrv.nl/?url=https://drive.google.com/uc?export%3Dview%26id%3D${match[0]}`;
+}
+
+// ============================================================
+// SHEET LOADING
+// ============================================================
+async function loadSheet() {
+  const cfg = getConfig();
+  if (!cfg.sheetId || !cfg.apiKey) {
+    showCollectionState('⚠ No data source configured. Go to Config tab.', true);
+    return;
+  }
+
+  const tab   = cfg.tabName || 'Sheet1';
+  const range = encodeURIComponent(`${tab}!A2:N200`);
+  const url   = `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}/values/${range}?key=${cfg.apiKey}`;
+
+  showCollectionState('Loading force data...');
+
+  try {
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error(`Sheets API: ${res.status} ${res.statusText}`);
+    const data = await res.json();
+    const rows = data.values || [];
+
+    const parseLimit = val => {
+      const s = (val || '').toString().trim().toUpperCase();
+      if (s === 'U') return Infinity;
+      const n = parseInt(s);
+      return isNaN(n) ? 0 : n;
+    };
+
+    COLLECTION = rows
+      .filter(r => r[0] && r[0].trim())
+      .map(r => {
+        const rawCode = (r[0] || '').trim();
+        const isChar  = rawCode.endsWith('_C');
+        const code    = isChar ? rawCode.slice(0, -2) : rawCode;
+        return {
+          code,
+          rawCode,
+          isCharacter:   isChar,
+          faction:       (r[1] || '').trim(),
+          name:          (r[2] || '').trim(),
+          quantity:      parseInt(r[3]) || 0,
+          battleRating:  parseInt(r[4]) || 0,
+          total:         parseInt(r[5]) || 0,
+          brigadeLimit:  parseLimit(r[6]),
+          divisionLimit: parseLimit(r[7]),
+          corpsLimit:    parseLimit(r[8]),
+          armyLimit:     parseLimit(r[9]),
+          cardBackUrl:   (r[10] || '').trim(),
+          unitImageUrl:  (r[11] || '').trim(),
+          cardFrontUrl:  (r[12] || '').trim(),
+
+        };
+      });
+
+    // Sort by code (numeric), characters after their base unit
+    COLLECTION.sort((a, b) => {
+      if (a.code !== b.code) return a.code.localeCompare(b.code, undefined, { numeric: true });
+      return a.isCharacter ? 1 : -1;
+    });
+
+    renderCollection();
+    initBuilder();
+    initRandom();
+
+    document.getElementById('collection-total').textContent =
+      `${COLLECTION.length} units · ${COLLECTION.reduce((a,u)=>a+u.quantity,0)} models`;
+
+  } catch (err) {
+    showCollectionState(`Error: ${err.message}`, true);
+  }
+}
+
+function showCollectionState(msg, isError) {
+  const grid = document.getElementById('collection-grid');
+  grid.innerHTML = `<div class="load-state${isError ? ' error' : ''}">${msg}</div>`;
+}
+
+// ============================================================
+// COLLECTION TAB
+// ============================================================
+let collectionFilter = 'all';
+
+function renderCollection() {
+  const grid = document.getElementById('collection-grid');
+  grid.innerHTML = '';
+
+  const filtered = COLLECTION.filter(u =>
+    collectionFilter === 'all' || u.faction === collectionFilter
+  );
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="load-state">No units found.</div>';
+    return;
+  }
+
+  filtered.forEach((unit, i) => {
+    const card = document.createElement('div');
+    const fClass = unit.faction === 'Nexus' ? 'nexus-card'
+                 : unit.faction.toLowerCase().includes('pter') ? 'ptero-card' : '';
+    card.className = `unit-card ${fClass}`;
+    card.style.animationDelay = `${i * 25}ms`;
+
+    const imgUrl = proxyImg(unit.unitImageUrl);
+
+    card.innerHTML = `
+      <div class="card-img-wrap">
+        <span class="card-code">${unit.code}</span>
+        <span class="card-qty">${unit.quantity}×</span>
+        ${imgUrl
+          ? `<img src="${imgUrl}" alt="${unit.name}" loading="lazy" onerror="this.style.display='none'">`
+          : `<div class="card-img-placeholder">${unit.code}</div>`
+        }
+      </div>
+      <div class="card-info">
+        <div class="card-name">${unit.name}</div>
+        <div class="card-meta">
+          <div>
+            <div class="card-br">${unit.battleRating}</div>
+            <div class="card-br-label">Battle Rating</div>
+          </div>
+          <span class="badge badge-${unit.faction === 'Nexus' ? 'nexus' : unit.faction.toLowerCase().includes('pter') ? 'ptero' : 'karn'}">${unit.faction}</span>
+        </div>
+      </div>
+    `;
+
+    card.addEventListener('click', () => openLightbox(unit));
+    grid.appendChild(card);
+  });
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    collectionFilter = btn.dataset.faction;
+    renderCollection();
+  });
+});
+
+// ============================================================
+// LIGHTBOX
+// ============================================================
+function openLightbox(unit) {
+  const lb      = document.getElementById('lightbox');
+  const header  = document.getElementById('lb-header');
+  const isNexus = unit.faction === 'Nexus';
+
+  document.getElementById('lb-code').textContent = unit.code;
+  document.getElementById('lb-name').textContent = unit.name;
+  document.getElementById('lb-badge').innerHTML =
+    `<span class="badge badge-${isNexus ? 'nexus' : 'karn'}">${unit.faction}</span>`;
+
+  header.className = `lb-header${isNexus ? ' nexus' : ''}`;
+
+  // Images
+  const imgs = document.getElementById('lb-images');
+  imgs.innerHTML = '';
+  [unit.cardFrontUrl, unit.cardBackUrl]
+    .filter(u => u)
+    .forEach(rawUrl => {
+      const url = proxyImg(rawUrl);
+      if (url) {
+        const img = document.createElement('img');
+        img.src = url;
+        img.loading = 'lazy';
+        imgs.appendChild(img);
+      }
+    });
+
+  if (!imgs.children.length) {
+    imgs.innerHTML = '<div class="load-state" style="padding:30px;">No images</div>';
+  }
+
+  // Stats
+  const stats = document.getElementById('lb-stats');
+  const tier = getTier(500);
+
+  stats.innerHTML = `
+    <div class="lb-stat-row">
+      <div class="lb-stat-label">Battle Rating</div>
+      <div class="lb-stat-val">${unit.battleRating}</div>
+    </div>
+    <div class="lb-stat-row">
+      <div class="lb-stat-label">Quantity Owned</div>
+      <div class="lb-stat-val">${unit.quantity}</div>
+    </div>
+    <div class="lb-stat-row">
+      <div class="lb-stat-label">Total BR Value</div>
+      <div class="lb-stat-val">${unit.total}</div>
+    </div>
+    <div class="lb-limits">
+      <div class="lb-limits-title">Division Limits</div>
+      ${TIER_LABELS.map((label, i) => `
+        <div class="lb-limit-row">
+          <span>${label} (${TIER_RANGES[i][0]}–${TIER_RANGES[i][1] === Infinity ? '∞' : TIER_RANGES[i][1]})</span>
+          <span>${getLimit(unit, i) === Infinity ? "∞" : getLimit(unit, i)}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+document.getElementById('lb-close-btn').addEventListener('click', closeLightbox);
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+});
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// ============================================================
+// BATTLE BUILDER
+// ============================================================
+let builderState = { faction: 'Karn', points: 500, roster: {} };
+
+function loadBuilderState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_BUILDER));
+    if (saved) builderState = saved;
+  } catch {}
+  document.getElementById('b-points').value  = builderState.points;
+  document.getElementById('b-faction').value = builderState.faction;
+}
+
+function saveBuilderState() {
+  localStorage.setItem(LS_BUILDER, JSON.stringify(builderState));
+}
+
+function initBuilder() {
+  loadBuilderState();
+  renderBuilderSelector();
+  renderBuilderRoster();
+
+  document.getElementById('b-points').addEventListener('input', () => {
+    builderState.points = parseInt(document.getElementById('b-points').value) || 0;
+    saveBuilderState();
+    renderBuilderSelector();
+    renderBuilderRoster();
+  });
+
+  document.getElementById('b-faction').addEventListener('change', () => {
+    builderState.faction = document.getElementById('b-faction').value;
+    builderState.roster  = {};
+    saveBuilderState();
+    renderBuilderSelector();
+    renderBuilderRoster();
+  });
+
+  document.getElementById('b-reset-btn').addEventListener('click', () => {
+    builderState.roster = {};
+    saveBuilderState();
+    renderBuilderSelector();
+    renderBuilderRoster();
+  });
+}
+
+function getBuilderTier() { return getTier(builderState.points); }
+
+function rosterPoints() {
+  return Object.entries(builderState.roster).reduce((sum, [code, qty]) => {
+    const unit = COLLECTION.find(u => u.code === code);
+    return sum + (unit ? unit.battleRating * qty : 0);
+  }, 0);
+}
+
+function renderBuilderRoster() {
+  const isNexus = builderState.faction === 'Nexus';
+  const tierIdx = getBuilderTier();
+  const used    = rosterPoints();
+  const limit   = builderState.points;
+  const pct     = limit > 0 ? Math.min(100, (used / limit) * 100) : 0;
+
+  // Meter
+  document.getElementById('b-pts-used').textContent  = used;
+  document.getElementById('b-pts-limit').textContent = `/ ${limit}`;
+  document.getElementById('b-tier-badge').textContent = TIER_LABELS[tierIdx];
+
+  const meter = document.getElementById('b-meter');
+  meter.style.width = pct + '%';
+  meter.className   = `meter-fill${used > limit ? ' over' : isNexus ? ' nexus-fill' : ''}`;
+
+  // Roster rows
+  const roster = document.getElementById('b-roster');
+  const entries = Object.entries(builderState.roster).filter(([,q]) => q > 0);
+
+  if (!entries.length) {
+    roster.innerHTML = '<div class="roster-empty">No units deployed.<br>Select units from the right.</div>';
+    return;
+  }
+
+  roster.innerHTML = '';
+  entries.forEach(([rawCode, qty]) => {
+    const unit = COLLECTION.find(u => u.rawCode === rawCode);
+    if (!unit) return;
+    const maxQty  = getLimit(unit, tierIdx);
+    const divLimit = maxQty === Infinity ? unit.quantity : Math.min(unit.quantity, maxQty);
+    const row     = document.createElement('div');
+    row.className = `roster-unit-row${isNexus ? ' nexus-row' : ''}`;
+
+    row.innerHTML = `
+      <span class="roster-unit-code">${unit.code}</span>
+      <span class="roster-unit-name">${unit.name}</span>
+      <div class="qty-controls">
+        <button class="qty-btn${isNexus ? ' nexus-btn-sm' : ''}" data-action="dec" data-code="${unit.rawCode}">−</button>
+        <span class="qty-val">${qty}</span>
+        <button class="qty-btn${isNexus ? ' nexus-btn-sm' : ''}" data-action="inc" data-code="${unit.rawCode}" ${qty >= divLimit ? 'disabled style="opacity:0.3"' : ''}>+</button>
+      </div>
+      <div>
+        <div class="roster-cost">${unit.battleRating * qty} BR</div>
+        <div class="roster-limit-warn">${qty}/${divLimit} max</div>
+      </div>
+    `;
+
+    roster.appendChild(row);
+  });
+
+  roster.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const rawCode = btn.dataset.code;
+      const action  = btn.dataset.action;
+      const unit    = COLLECTION.find(u => u.rawCode === rawCode);
+      if (!unit) return;
+      const tierIdx  = getBuilderTier();
+      const maxQty   = getLimit(unit, tierIdx);
+      const divLimit = maxQty === Infinity ? unit.quantity : Math.min(unit.quantity, maxQty);
+      const cur      = builderState.roster[rawCode] || 0;
+
+      if (action === 'inc' && cur < divLimit) {
+        builderState.roster[rawCode] = cur + 1;
+      } else if (action === 'dec') {
+        builderState.roster[rawCode] = Math.max(0, cur - 1);
+        if (builderState.roster[rawCode] === 0) delete builderState.roster[rawCode];
+      }
+      saveBuilderState();
+      renderBuilderSelector();
+      renderBuilderRoster();
+    });
+  });
+}
+
+function renderBuilderSelector() {
+  const isNexus = builderState.faction === 'Nexus';
+  const tierIdx = getBuilderTier();
+  const sel     = document.getElementById('b-selector');
+  const units   = COLLECTION.filter(u => u.faction === builderState.faction);
+
+  sel.innerHTML = '';
+
+  units.forEach(unit => {
+    const maxQty   = getLimit(unit, tierIdx);
+    const divLimit = maxQty === Infinity ? unit.quantity : Math.min(unit.quantity, maxQty);
+    const cur      = builderState.roster[unit.rawCode] || 0;
+    const maxed    = cur >= divLimit;
+
+    const row = document.createElement('div');
+    row.className = `selector-row${isNexus ? ' nexus-selector' : ''}${maxed ? ' maxed' : ''}`;
+
+    row.innerHTML = `
+      <span class="selector-name">${unit.name}</span>
+      <span class="selector-detail">
+        ${unit.battleRating} Battle Rating<br>
+        <span style="color:var(--gold)">${cur}/${divLimit}</span>
+      </span>
+      <span class="selector-add">＋</span>
+    `;
+
+    if (!maxed) {
+      row.addEventListener('click', () => {
+        builderState.roster[unit.rawCode] = (builderState.roster[unit.rawCode] || 0) + 1;
+        saveBuilderState();
+        renderBuilderSelector();
+        renderBuilderRoster();
+      });
+    }
+
+    sel.appendChild(row);
+  });
+
+  if (!units.length) {
+    sel.innerHTML = '<div class="load-state" style="padding:30px;">No units for this faction.</div>';
+  }
+}
+
+// ============================================================
+// RANDOM LISTS
+// ============================================================
+let randomState = { karn: [], nexus: [], points: 500 };
+
+function loadRandomState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_RANDOM));
+    if (saved) randomState = saved;
+  } catch {}
+  document.getElementById('r-points').value = randomState.points;
+}
+
+function saveRandomState() {
+  localStorage.setItem(LS_RANDOM, JSON.stringify(randomState));
+}
+
+function initRandom() {
+  loadRandomState();
+  renderRandomLists();
+
+  document.getElementById('r-generate-btn').addEventListener('click', () => {
+    const pts = parseInt(document.getElementById('r-points').value) || 500;
+    randomState.points = pts;
+    randomState.karn   = generateList('Karn', pts);
+    randomState.nexus  = generateList('Nexus', pts);
+    saveRandomState();
+    renderRandomLists();
+  });
+
+  document.getElementById('r-reset-btn').addEventListener('click', () => {
+    randomState.karn  = [];
+    randomState.nexus = [];
+    saveRandomState();
+    renderRandomLists();
+  });
+}
+
+function generateList(faction, pointsLimit) {
+  const tierIdx = getTier(pointsLimit);
+  const pool    = COLLECTION
+    .filter(u => u.faction === faction && u.battleRating > 0)
+    .map(u => { const lim = getLimit(u, tierIdx); return { ...u, available: lim === Infinity ? u.quantity : Math.min(u.quantity, lim) }; })
+    .filter(u => u.available > 0 && u.battleRating <= pointsLimit);
+
+  if (!pool.length) return [];
+
+  // Shuffle pool for variety
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+
+  const result  = [];
+  let remaining = pointsLimit;
+
+  // First pass: try to give each unit type at least 1 model for spread
+  for (const unit of pool) {
+    if (remaining <= 0) break;
+    if (unit.battleRating <= remaining) {
+      result.push({ code: unit.code, name: unit.name, qty: 1, battleRating: unit.battleRating, maxAvail: unit.available });
+      remaining -= unit.battleRating;
+    }
+  }
+
+  // Second pass: fill up by adding more models to existing units
+  let changed = true;
+  while (changed && remaining > 0) {
+    changed = false;
+    // Shuffle result order for variety
+    for (let i = result.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    for (const entry of result) {
+      if (entry.qty < entry.maxAvail && entry.battleRating <= remaining) {
+        entry.qty++;
+        remaining -= entry.battleRating;
+        changed = true;
+        break;
+      }
+    }
+  }
+
+  return result.filter(e => e.qty > 0);
+}
+
+function renderRandomLists() {
+  renderRandomList('karn', randomState.karn);
+  renderRandomList('nexus', randomState.nexus);
+}
+
+function renderRandomList(faction, list) {
+  const bodyEl  = document.getElementById(`r-${faction}-list`);
+  const totalEl = document.getElementById(`r-${faction}-total`);
+
+  if (!list || !list.length) {
+    bodyEl.innerHTML  = '<div class="random-empty">Generate a list to deploy forces.</div>';
+    totalEl.textContent = '— pts';
+    return;
+  }
+
+  const total = list.reduce((sum, e) => sum + e.battleRating * e.qty, 0);
+  totalEl.textContent = `${total} BR`;
+
+  bodyEl.innerHTML = '';
+  list.forEach(entry => {
+    const row = document.createElement('div');
+    row.className = 'random-unit-row';
+    row.innerHTML = `
+      <span class="random-unit-name">${entry.name}</span>
+      <span class="random-unit-qty">${entry.qty}×</span>
+      <span class="random-unit-pts">${entry.battleRating * entry.qty} BR</span>
+    `;
+    bodyEl.appendChild(row);
+  });
+}
+
+// ============================================================
+// CONFIG TAB
+// ============================================================
+function initConfig() {
+  const cfg = getConfig();
+  if (cfg.sheetId)  document.getElementById('cfg-sheet-id').value  = cfg.sheetId;
+  if (cfg.apiKey)   document.getElementById('cfg-api-key').value   = cfg.apiKey;
+  if (cfg.tabName)  document.getElementById('cfg-tab-name').value  = cfg.tabName;
+
+  document.getElementById('cfg-save-btn').addEventListener('click', async () => {
+    const sheetId = document.getElementById('cfg-sheet-id').value.trim();
+    const apiKey  = document.getElementById('cfg-api-key').value.trim();
+    const tabName = document.getElementById('cfg-tab-name').value.trim() || 'Sheet1';
+    const status  = document.getElementById('cfg-status');
+
+    if (!sheetId || !apiKey) {
+      status.textContent = '⚠ Sheet ID and API Key are required.';
+      status.className   = 'config-status err';
+      return;
+    }
+
+    saveConfig({ sheetId, apiKey, tabName });
+
+    status.textContent = '✓ Saved. Loading data...';
+    status.className   = 'config-status ok';
+
+    await loadSheet();
+
+    status.textContent = COLLECTION.length
+      ? `✓ Loaded ${COLLECTION.length} units successfully.`
+      : '⚠ Connected but no data found. Check tab name.';
+    status.className = COLLECTION.length ? 'config-status ok' : 'config-status err';
+  });
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+  });
+});
+
+// ============================================================
+// INIT
+// ============================================================
+initConfig();
+loadSheet();
+</script>
+</body>
+</html>
