@@ -979,6 +979,201 @@ body::before {
   display: inline-block;
 }
 
+/* Save list button */
+.btn-save-list {
+  font-family: 'Black Ops One', cursive;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-save-list:hover { background: var(--gold); color: #000; }
+
+/* Saved lists grid */
+.saved-lists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.saved-list-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  overflow: hidden;
+  animation: cardIn 0.3s ease both;
+}
+
+.saved-list-card-header {
+  padding: 12px 16px;
+  background: #0a0a0a;
+  border-bottom: 3px solid var(--karn);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.saved-list-card-header.nexus { border-bottom-color: var(--nexus-lt); }
+
+.saved-list-card-name {
+  font-family: 'Black Ops One', cursive;
+  font-size: 13px;
+  letter-spacing: 1px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.saved-list-card-meta {
+  padding: 10px 16px;
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.saved-list-meta-item {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.saved-list-meta-item span {
+  color: var(--gold);
+  font-weight: bold;
+}
+
+.saved-list-card-body {
+  padding: 10px 16px;
+}
+
+.saved-list-unit-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.saved-list-unit-row:last-child { border-bottom: none; }
+.saved-list-unit-row span:first-child { color: var(--text); }
+.saved-list-unit-row span:last-child  { color: var(--gold); }
+
+.saved-list-card-actions {
+  padding: 10px 16px;
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.btn-load-list {
+  font-family: 'Black Ops One', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: var(--karn);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex: 1;
+}
+.btn-load-list:hover { background: var(--karn-lt); }
+.btn-load-list.nexus { background: var(--nexus); }
+.btn-load-list.nexus:hover { background: var(--nexus-lt); }
+
+.btn-delete-list {
+  font-family: 'Black Ops One', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-delete-list:hover { border-color: var(--karn); color: var(--karn-lt); }
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+
+.modal-box {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-top: 3px solid var(--karn);
+  padding: 28px;
+  width: 100%;
+  max-width: 420px;
+  animation: lbIn 0.2s ease;
+}
+.modal-box.nexus { border-top-color: var(--nexus-lt); }
+
+.modal-title {
+  font-family: 'Bangers', cursive;
+  font-size: 26px;
+  letter-spacing: 3px;
+  margin-bottom: 18px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.btn-modal-confirm {
+  font-family: 'Black Ops One', cursive;
+  font-size: 11px;
+  letter-spacing: 2px;
+  background: var(--karn);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  flex: 1;
+  transition: background 0.15s;
+}
+.btn-modal-confirm:hover { background: var(--karn-lt); }
+.btn-modal-confirm.nexus { background: var(--nexus); }
+.btn-modal-confirm.nexus:hover { background: var(--nexus-lt); }
+
+.btn-modal-cancel {
+  font-family: 'Black Ops One', cursive;
+  font-size: 11px;
+  letter-spacing: 2px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-modal-cancel:hover { color: var(--text); border-color: var(--muted); }
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #111; }
@@ -1011,6 +1206,7 @@ body::before {
   <button class="nav-btn active" data-tab="collection">⚔ Collection</button>
   <button class="nav-btn" data-tab="builder">☠ Battle Builder</button>
   <button class="nav-btn" data-tab="random">⚡ Random Rosters</button>
+  <button class="nav-btn" data-tab="saved">☑ Saved Lists</button>
   <button class="nav-btn" data-tab="config">⚙ Config</button>
 </nav>
 
@@ -1078,6 +1274,7 @@ body::before {
             </div>
           </div>
 
+          <button class="btn-primary" id="b-save-btn" style="margin-top:8px;">☑ SAVE ROSTER</button>
           <button class="btn-danger" id="b-reset-btn">Reset Roster</button>
         </div>
 
@@ -1123,7 +1320,10 @@ body::before {
       <div class="random-list">
         <div class="random-list-header">
           <div class="random-list-title faction-karn">KARN EMPIRE</div>
-          <div class="random-unit-pts" id="r-karn-total">— pts</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="random-unit-pts" id="r-karn-total">— pts</div>
+            <button class="btn-save-list" id="r-save-karn-btn" data-faction="Karn">SAVE</button>
+          </div>
         </div>
         <div class="random-list-body" id="r-karn-list">
           <div class="random-empty">Generate a list to deploy forces.</div>
@@ -1134,12 +1334,27 @@ body::before {
       <div class="random-list">
         <div class="random-list-header nexus">
           <div class="random-list-title faction-nexus">NEXUS REBELLION</div>
-          <div class="random-unit-pts" id="r-nexus-total">— pts</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="random-unit-pts" id="r-nexus-total">— pts</div>
+            <button class="btn-save-list" id="r-save-nexus-btn" data-faction="Nexus">SAVE</button>
+          </div>
         </div>
         <div class="random-list-body" id="r-nexus-list">
           <div class="random-empty">Generate a list to deploy forces.</div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ==================== SAVED LISTS TAB ==================== -->
+  <div class="tab" id="tab-saved">
+    <div class="section-head">
+      <div class="section-title">SAVED LISTS</div>
+      <div class="section-rule"></div>
+      <button class="btn-generate" style="flex-shrink:0;" id="sl-refresh-btn">↻ REFRESH</button>
+    </div>
+    <div id="sl-grid" class="saved-lists-grid">
+      <div class="load-state">Load saved lists to see them here.</div>
     </div>
   </div>
 
@@ -1170,6 +1385,14 @@ body::before {
         <input class="form-input" type="text" id="cfg-tab-name" placeholder="Sheet1">
       </div>
 
+      <div class="config-section-title" style="margin-top:24px;">List Saving (Write Access)</div>
+
+      <div class="form-group">
+        <label class="form-label">Service Account JSON</label>
+        <textarea class="form-input" id="cfg-service-json" rows="5" placeholder='{"type":"service_account","project_id":"...","private_key":"...","client_email":"...",...}' style="height:auto;resize:vertical;font-size:11px;padding:8px 12px;line-height:1.4;"></textarea>
+        <div class="config-note">Paste your full service account JSON. Stored locally, never transmitted except to Google.</div>
+      </div>
+
       <button class="btn-primary" id="cfg-save-btn">SAVE &amp; RELOAD</button>
       <div class="config-status" id="cfg-status"></div>
     </div>
@@ -1193,6 +1416,47 @@ body::before {
     <div class="lb-body">
       <div class="lb-images" id="lb-images"></div>
       <div class="lb-stats" id="lb-stats"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SAVE MODAL -->
+<div class="modal-overlay" id="save-modal">
+  <div class="modal-box" id="save-modal-box">
+    <div class="modal-title" id="save-modal-title">SAVE ROSTER</div>
+    <div class="form-group">
+      <label class="form-label">List Name</label>
+      <input class="form-input" type="text" id="save-modal-name" placeholder="e.g. Assault Force Alpha" maxlength="60">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-confirm" id="save-modal-confirm">SAVE</button>
+      <button class="btn-modal-cancel" id="save-modal-cancel">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOAD CONFIRM MODAL -->
+<div class="modal-overlay" id="load-modal">
+  <div class="modal-box">
+    <div class="modal-title">LOAD ROSTER</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:4px;">This will replace your current Battle Builder roster.</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);">Any unsaved changes will be lost.</div>
+    <div class="modal-actions">
+      <button class="btn-modal-confirm" id="load-modal-confirm">LOAD</button>
+      <button class="btn-modal-cancel" id="load-modal-cancel">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal-box">
+    <div class="modal-title">DELETE LIST</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:4px;">This will permanently delete this saved list.</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);">This cannot be undone.</div>
+    <div class="modal-actions">
+      <button class="btn-modal-confirm" style="background:var(--karn);" id="delete-modal-confirm">DELETE</button>
+      <button class="btn-modal-cancel" id="delete-modal-cancel">CANCEL</button>
     </div>
   </div>
 </div>
@@ -1694,7 +1958,7 @@ function generateList(faction, pointsLimit) {
   for (const unit of pool) {
     if (remaining <= 0) break;
     if (unit.battleRating <= remaining) {
-      result.push({ code: unit.code, name: unit.name, qty: 1, battleRating: unit.battleRating, maxAvail: unit.available });
+      result.push({ code: unit.code, rawCode: unit.rawCode, name: unit.name, qty: 1, battleRating: unit.battleRating, maxAvail: unit.available });
       remaining -= unit.battleRating;
     }
   }
@@ -1757,15 +2021,17 @@ function renderRandomList(faction, list) {
 // ============================================================
 function initConfig() {
   const cfg = getConfig();
-  if (cfg.sheetId)  document.getElementById('cfg-sheet-id').value  = cfg.sheetId;
-  if (cfg.apiKey)   document.getElementById('cfg-api-key').value   = cfg.apiKey;
-  if (cfg.tabName)  document.getElementById('cfg-tab-name').value  = cfg.tabName;
+  if (cfg.sheetId)     document.getElementById('cfg-sheet-id').value     = cfg.sheetId;
+  if (cfg.apiKey)      document.getElementById('cfg-api-key').value      = cfg.apiKey;
+  if (cfg.tabName)     document.getElementById('cfg-tab-name').value     = cfg.tabName;
+  if (cfg.serviceJson) document.getElementById('cfg-service-json').value = cfg.serviceJson;
 
   document.getElementById('cfg-save-btn').addEventListener('click', async () => {
-    const sheetId = document.getElementById('cfg-sheet-id').value.trim();
-    const apiKey  = document.getElementById('cfg-api-key').value.trim();
-    const tabName = document.getElementById('cfg-tab-name').value.trim() || 'Sheet1';
-    const status  = document.getElementById('cfg-status');
+    const sheetId     = document.getElementById('cfg-sheet-id').value.trim();
+    const apiKey      = document.getElementById('cfg-api-key').value.trim();
+    const tabName     = document.getElementById('cfg-tab-name').value.trim() || 'Sheet1';
+    const serviceJson = document.getElementById('cfg-service-json').value.trim();
+    const status      = document.getElementById('cfg-status');
 
     if (!sheetId || !apiKey) {
       status.textContent = '⚠ Sheet ID and API Key are required.';
@@ -1773,7 +2039,7 @@ function initConfig() {
       return;
     }
 
-    saveConfig({ sheetId, apiKey, tabName });
+    saveConfig({ sheetId, apiKey, tabName, serviceJson });
 
     status.textContent = '✓ Saved. Loading data...';
     status.className   = 'config-status ok';
@@ -1787,6 +2053,351 @@ function initConfig() {
   });
 }
 
+
+// ============================================================
+// SAVED LISTS
+// ============================================================
+const SAVED_TAB = 'Havok_Saved_Lists';
+let pendingSave   = null; // { name, faction, roster, points }
+let pendingLoad   = null; // { roster, faction, points }
+let pendingDelete = null; // rowIndex
+
+// ── Service account JWT auth ─────────────────────────────────
+let _cachedToken = null;
+let _tokenExpiry = 0;
+
+async function getAccessToken() {
+  if (_cachedToken && Date.now() < _tokenExpiry - 60000) return _cachedToken;
+
+  const cfg = getConfig();
+  if (!cfg.serviceJson) throw new Error('No service account JSON configured. Add it in Config tab.');
+
+  let sa;
+  try { sa = JSON.parse(cfg.serviceJson); }
+  catch { throw new Error('Service account JSON is invalid. Check Config tab.'); }
+
+  const now    = Math.floor(Date.now() / 1000);
+  const claim  = { iss: sa.client_email, scope: 'https://www.googleapis.com/auth/spreadsheets', aud: sa.token_uri, iat: now, exp: now + 3600 };
+  const jwt    = await makeJWT(claim, sa.private_key);
+
+  const res = await fetch(sa.token_uri, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err?.error_description || err?.error || `Token request failed: HTTP ${res.status}`);
+  }
+
+  const data    = await res.json();
+  _cachedToken  = data.access_token;
+  _tokenExpiry  = Date.now() + (data.expires_in || 3600) * 1000;
+  return _cachedToken;
+}
+
+async function makeJWT(claim, pemKey) {
+  const header  = { alg: 'RS256', typ: 'JWT' };
+  const enc     = v => btoa(JSON.stringify(v)).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+  const b64enc  = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+
+  const sigInput = `${enc(header)}.${enc(claim)}`;
+
+  // Import private key
+  const pemBody  = pemKey.replace(/-----[^-]+-----/g, '').replace(/\\n/g, '').replace(/\s/g, '').trim();
+  const derBuf   = Uint8Array.from(atob(pemBody), c => c.charCodeAt(0));
+  const key      = await crypto.subtle.importKey('pkcs8', derBuf, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']);
+  const sig      = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(sigInput));
+
+  return `${sigInput}.${b64enc(sig)}`;
+}
+
+// ── Sheet write helpers ──────────────────────────────────────
+async function sheetsAppend(values) {
+  const cfg   = getConfig();
+  const token = await getAccessToken();
+  const range = `${SAVED_TAB}!A:F`;
+  const res = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}/values/${encodeURIComponent(range)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+    {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ values }),
+    }
+  );
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+async function sheetsClearRow(rowIndex) {
+  const cfg   = getConfig();
+  const token = await getAccessToken();
+  const range = `${SAVED_TAB}!A${rowIndex}:F${rowIndex}`;
+  const res = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,
+    {
+      method: 'PUT',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ values: [['', '', '', '', '', '']] }),
+    }
+  );
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+async function sheetsReadSaved() {
+  const cfg = getConfig();
+  if (!cfg.sheetId || !cfg.apiKey) throw new Error('No sheet configured.');
+  const range = encodeURIComponent(`${SAVED_TAB}!A2:F500`);
+  const res = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}/values/${range}?key=${cfg.apiKey}`
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return (data.values || [])
+    .map((row, i) => ({ rowIndex: i + 2, id: row[0], name: row[1], faction: row[2], points: row[3], date: row[4], listData: row[5] }))
+    .filter(r => r.id && r.name);
+}
+
+// ── Save modal ───────────────────────────────────────────────
+function openSaveModal(faction, roster, points) {
+  pendingSave = { faction, roster, points };
+  const isNexus = faction === 'Nexus';
+  document.getElementById('save-modal-box').className = `modal-box${isNexus ? ' nexus' : ''}`;
+  document.getElementById('save-modal-title').textContent = `SAVE ${faction.toUpperCase()} ROSTER`;
+  document.getElementById('save-modal-confirm').className = `btn-modal-confirm${isNexus ? ' nexus' : ''}`;
+  document.getElementById('save-modal-name').value = '';
+  document.getElementById('save-modal').classList.add('open');
+  document.getElementById('save-modal-name').focus();
+}
+
+document.getElementById('save-modal-cancel').addEventListener('click', () => {
+  document.getElementById('save-modal').classList.remove('open');
+  pendingSave = null;
+});
+
+document.getElementById('save-modal-confirm').addEventListener('click', async () => {
+  const name = document.getElementById('save-modal-name').value.trim();
+  if (!name) { document.getElementById('save-modal-name').focus(); return; }
+  document.getElementById('save-modal').classList.remove('open');
+  await doSaveList(name, pendingSave.faction, pendingSave.roster, pendingSave.points);
+  pendingSave = null;
+});
+
+document.getElementById('save-modal-name').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('save-modal-confirm').click();
+});
+
+async function doSaveList(name, faction, roster, points) {
+  const id       = `${Date.now()}`;
+  const date     = new Date().toLocaleDateString('en-GB');
+  const listJson = JSON.stringify(roster); // array of {rawCode, name, qty, battleRating}
+  try {
+    await sheetsAppend([[id, name, faction, points, date, listJson]]);
+    showToast(`✓ "${name}" saved`);
+    // Refresh saved lists if that tab is active
+    if (document.getElementById('tab-saved').classList.contains('active')) {
+      loadSavedLists();
+    }
+  } catch(err) {
+    showToast(`⚠ Save failed: ${err.message}`, true);
+  }
+}
+
+// ── Load modal ───────────────────────────────────────────────
+function openLoadModal(savedEntry) {
+  pendingLoad = savedEntry;
+  document.getElementById('load-modal').classList.add('open');
+}
+
+document.getElementById('load-modal-cancel').addEventListener('click', () => {
+  document.getElementById('load-modal').classList.remove('open');
+  pendingLoad = null;
+});
+
+document.getElementById('load-modal-confirm').addEventListener('click', () => {
+  document.getElementById('load-modal').classList.remove('open');
+  if (!pendingLoad) return;
+  try {
+    const roster = JSON.parse(pendingLoad.listData);
+    // Rebuild builderState.roster from saved data
+    builderState.faction = pendingLoad.faction;
+    builderState.points  = parseInt(pendingLoad.points) || 500;
+    builderState.roster  = {};
+    roster.forEach(entry => {
+      builderState.roster[entry.rawCode] = entry.qty;
+    });
+    saveBuilderState();
+    // Switch to builder tab
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelector('.nav-btn[data-tab="builder"]').classList.add('active');
+    document.getElementById('tab-builder').classList.add('active');
+    // Update builder UI
+    document.getElementById('b-points').value  = builderState.points;
+    document.getElementById('b-faction').value = builderState.faction;
+    renderBuilderSelector();
+    renderBuilderRoster();
+    showToast(`✓ "${pendingLoad.name}" loaded into Battle Builder`);
+  } catch(err) {
+    showToast(`⚠ Load failed: ${err.message}`, true);
+  }
+  pendingLoad = null;
+});
+
+// ── Delete modal ─────────────────────────────────────────────
+function openDeleteModal(rowIndex, name) {
+  pendingDelete = { rowIndex, name };
+  document.getElementById('delete-modal').classList.add('open');
+}
+
+document.getElementById('delete-modal-cancel').addEventListener('click', () => {
+  document.getElementById('delete-modal').classList.remove('open');
+  pendingDelete = null;
+});
+
+document.getElementById('delete-modal-confirm').addEventListener('click', async () => {
+  document.getElementById('delete-modal').classList.remove('open');
+  if (!pendingDelete) return;
+  try {
+    await sheetsClearRow(pendingDelete.rowIndex);
+    showToast(`✓ List deleted`);
+    loadSavedLists();
+  } catch(err) {
+    showToast(`⚠ Delete failed: ${err.message}`, true);
+  }
+  pendingDelete = null;
+});
+
+// ── Render saved lists ───────────────────────────────────────
+async function loadSavedLists() {
+  const grid = document.getElementById('sl-grid');
+  grid.innerHTML = '<div class="load-state">Loading saved lists...</div>';
+  try {
+    const lists = await sheetsReadSaved();
+    renderSavedLists(lists);
+  } catch(err) {
+    grid.innerHTML = `<div class="load-state error">⚠ ${err.message}</div>`;
+  }
+}
+
+function renderSavedLists(lists) {
+  const grid = document.getElementById('sl-grid');
+  if (!lists.length) {
+    grid.innerHTML = '<div class="load-state">No saved lists found.</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  lists.forEach((entry, i) => {
+    let roster = [];
+    try { roster = JSON.parse(entry.listData); } catch {}
+    const isNexus  = entry.faction === 'Nexus';
+    const total    = roster.reduce((s, e) => s + (e.battleRating * e.qty), 0);
+    const card     = document.createElement('div');
+    card.className = 'saved-list-card';
+    card.style.animationDelay = `${i * 30}ms`;
+
+    card.innerHTML = `
+      <div class="saved-list-card-header${isNexus ? ' nexus' : ''}">
+        <div class="saved-list-card-name">${entry.name}</div>
+        <span class="badge badge-${isNexus ? 'nexus' : 'karn'}">${entry.faction}</span>
+      </div>
+      <div class="saved-list-card-meta">
+        <div class="saved-list-meta-item">BR: <span>${total}</span></div>
+        <div class="saved-list-meta-item">Units: <span>${roster.reduce((s,e)=>s+e.qty,0)}</span></div>
+        <div class="saved-list-meta-item">Saved: <span>${entry.date}</span></div>
+      </div>
+      <div class="saved-list-card-body">
+        ${roster.map(e => `
+          <div class="saved-list-unit-row">
+            <span>${e.name}</span>
+            <span>${e.qty}× — ${e.battleRating * e.qty} BR</span>
+          </div>`).join('')}
+      </div>
+      <div class="saved-list-card-actions">
+        <button class="btn-load-list${isNexus ? ' nexus' : ''}" data-idx="${i}">LOAD INTO BUILDER</button>
+        <button class="btn-delete-list" data-row="${entry.rowIndex}" data-name="${entry.name}">DELETE</button>
+      </div>
+    `;
+
+    card.querySelector('.btn-load-list').addEventListener('click', () => openLoadModal(entry));
+    card.querySelector('.btn-delete-list').addEventListener('click', () => openDeleteModal(entry.rowIndex, entry.name));
+    grid.appendChild(card);
+  });
+}
+
+// ── Toast notification ───────────────────────────────────────
+function showToast(msg, isError = false) {
+  let toast = document.getElementById('havok-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'havok-toast';
+    toast.style.cssText = `position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+      font-family:'Black Ops One',cursive;font-size:11px;letter-spacing:2px;
+      padding:10px 20px;z-index:9999;border:1px solid;white-space:nowrap;
+      transition:opacity 0.3s;pointer-events:none;`;
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.background  = isError ? 'rgba(192,57,43,0.95)' : 'rgba(20,20,20,0.97)';
+  toast.style.color        = isError ? '#fff' : 'var(--gold)';
+  toast.style.borderColor  = isError ? 'var(--karn)' : 'var(--gold)';
+  toast.style.opacity      = '1';
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+}
+
+// ── Wire up save buttons ─────────────────────────────────────
+function initSavedLists() {
+  // Builder save button
+  document.getElementById('b-save-btn').addEventListener('click', () => {
+    const roster = Object.entries(builderState.roster)
+      .filter(([, qty]) => qty > 0)
+      .map(([rawCode, qty]) => {
+        const unit = COLLECTION.find(u => u.rawCode === rawCode);
+        return unit ? { rawCode, name: unit.name, qty, battleRating: unit.battleRating } : null;
+      })
+      .filter(Boolean);
+    if (!roster.length) { showToast('⚠ Roster is empty', true); return; }
+    openSaveModal(builderState.faction, roster, rosterPoints());
+  });
+
+  // Random roster save buttons
+  document.getElementById('r-save-karn-btn').addEventListener('click', () => {
+    if (!randomState.karn?.length) { showToast('⚠ No Karn roster generated', true); return; }
+    const roster = randomState.karn.map(e => ({ rawCode: e.rawCode || e.code, name: e.name, qty: e.qty, battleRating: e.battleRating }));
+    const pts    = randomState.karn.reduce((s, e) => s + e.battleRating * e.qty, 0);
+    openSaveModal('Karn', roster, pts);
+  });
+
+  document.getElementById('r-save-nexus-btn').addEventListener('click', () => {
+    if (!randomState.nexus?.length) { showToast('⚠ No Nexus roster generated', true); return; }
+    const roster = randomState.nexus.map(e => ({ rawCode: e.rawCode || e.code, name: e.name, qty: e.qty, battleRating: e.battleRating }));
+    const pts    = randomState.nexus.reduce((s, e) => s + e.battleRating * e.qty, 0);
+    openSaveModal('Nexus', roster, pts);
+  });
+
+  // Refresh button on saved lists tab
+  document.getElementById('sl-refresh-btn').addEventListener('click', loadSavedLists);
+
+  // Close modals on overlay click
+  ['save-modal','load-modal','delete-modal'].forEach(id => {
+    document.getElementById(id).addEventListener('click', e => {
+      if (e.target.id === id) {
+        document.getElementById(id).classList.remove('open');
+        pendingSave = pendingLoad = pendingDelete = null;
+      }
+    });
+  });
+}
+
 // ============================================================
 // NAVIGATION
 // ============================================================
@@ -1796,6 +2407,7 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+    if (btn.dataset.tab === 'saved') loadSavedLists();
   });
 });
 
@@ -1803,7 +2415,9 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 // INIT
 // ============================================================
 initConfig();
+initSavedLists();
 loadSheet();
 </script>
+
 </body>
 </html>
