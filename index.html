@@ -1186,6 +1186,304 @@ body::before {
   .unit-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
   .builder-panel { position: static; }
 }
+
+/* ===================== RULES TAB ===================== */
+.rules-search-wrap {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+.rules-search-input {
+  flex: 1;
+  background: #111;
+  border: 2px solid var(--border);
+  color: var(--text);
+  font-family: 'Oswald', sans-serif;
+  font-size: 15px;
+  padding: 0 16px;
+  height: 42px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.rules-search-input:focus { border-color: var(--karn); }
+.rules-search-input::placeholder { color: var(--muted); }
+
+.rules-search-clear {
+  font-family: 'Black Ops One', cursive;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0 14px;
+  height: 42px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.rules-search-clear:hover { color: var(--text); border-color: var(--muted); }
+
+.rules-match-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.rules-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 800px) { .rules-layout { grid-template-columns: 1fr; } }
+
+.rules-toc {
+  position: sticky;
+  top: 20px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  padding: 16px;
+}
+
+.rules-toc-title {
+  font-family: 'Black Ops One', cursive;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.rules-toc-link {
+  display: block;
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: color 0.15s;
+  letter-spacing: 0.5px;
+}
+.rules-toc-link:hover { color: var(--karn-lt); }
+.rules-toc-link:last-child { border-bottom: none; }
+
+.rules-content {
+  min-width: 0;
+}
+
+.rules-section {
+  margin-bottom: 40px;
+  scroll-margin-top: 20px;
+}
+.rules-section.hidden { display: none; }
+
+.rules-section-title {
+  font-family: 'Bangers', cursive;
+  font-size: 28px;
+  letter-spacing: 3px;
+  color: var(--text);
+  text-shadow: 2px 2px 0 var(--karn);
+  border-bottom: 3px solid var(--karn);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.rules-subsection {
+  margin-bottom: 20px;
+}
+
+.rules-subsection-title {
+  font-family: 'Black Ops One', cursive;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.rules-text {
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+.rules-text p { margin-bottom: 10px; }
+.rules-text p:last-child { margin-bottom: 0; }
+
+.rules-text ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+
+.rules-text ul li {
+  padding: 4px 0 4px 18px;
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.rules-text ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--karn);
+  font-size: 11px;
+  top: 6px;
+}
+
+.rules-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+
+.rules-table th {
+  background: #111;
+  color: var(--gold);
+  font-family: 'Black Ops One', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  text-align: left;
+  border: 1px solid var(--border);
+}
+
+.rules-table td {
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+
+.rules-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+/* Clickable rule terms in rules text */
+.rule-term {
+  color: var(--karn-lt);
+  border-bottom: 1px dashed var(--karn);
+  cursor: pointer;
+  transition: color 0.1s, background 0.1s;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+.rule-term:hover {
+  color: #fff;
+  background: rgba(192,57,43,0.2);
+}
+
+/* Highlight matched search text */
+mark.rules-hl {
+  background: rgba(212,172,13,0.35);
+  color: var(--gold);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* Rules term modal */
+.rules-term-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 3000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.rules-term-modal.open { display: flex; }
+
+.rules-term-box {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-top: 3px solid var(--gold);
+  padding: 0;
+  width: 100%;
+  max-width: 520px;
+  animation: lbIn 0.2s ease;
+  overflow: hidden;
+}
+
+.rules-term-header {
+  background: #0a0a0a;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rules-term-name {
+  font-family: 'Bangers', cursive;
+  font-size: 30px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.rules-term-close {
+  font-family: 'Black Ops One', cursive;
+  font-size: 11px;
+  letter-spacing: 1px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.rules-term-close:hover { color: var(--text); border-color: var(--muted); }
+
+.rules-term-body {
+  padding: 20px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.rules-term-body p { margin-bottom: 10px; }
+.rules-term-body p:last-child { margin-bottom: 0; }
+
+.rules-term-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+.rules-term-body ul li {
+  padding: 3px 0 3px 16px;
+  position: relative;
+}
+.rules-term-body ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-size: 10px;
+  top: 5px;
+}
+
+.rules-term-source {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding: 10px 20px;
+  letter-spacing: 1px;
+}
 </style>
 </head>
 <body>
@@ -1207,6 +1505,7 @@ body::before {
   <button class="nav-btn" data-tab="builder">☠ Battle Builder</button>
   <button class="nav-btn" data-tab="random">⚡ Random Rosters</button>
   <button class="nav-btn" data-tab="saved">☑ Saved Lists</button>
+  <button class="nav-btn" data-tab="rules">📖 Rules</button>
   <button class="nav-btn" data-tab="config">⚙ Config</button>
 </nav>
 
@@ -1358,6 +1657,33 @@ body::before {
     </div>
   </div>
 
+  <!-- ==================== RULES TAB ==================== -->
+  <div class="tab" id="tab-rules">
+    <div class="section-head">
+      <div class="section-title">RULES</div>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="rules-search-wrap">
+      <input class="rules-search-input" type="text" id="rules-search" placeholder="Search rules... e.g. Firepower, Psyke, Combat Round">
+      <button class="rules-search-clear" id="rules-search-clear">CLEAR</button>
+      <div class="rules-match-count" id="rules-match-count"></div>
+    </div>
+
+    <div class="rules-layout">
+      <!-- Table of Contents -->
+      <div class="rules-toc" id="rules-toc">
+        <div class="rules-toc-title">Sections</div>
+        <!-- populated by JS -->
+      </div>
+
+      <!-- Rules content -->
+      <div class="rules-content" id="rules-content">
+        <!-- populated by JS from RULES_DATA -->
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== CONFIG TAB ==================== -->
   <div class="tab" id="tab-config">
     <div class="section-head">
@@ -1417,6 +1743,18 @@ body::before {
       <div class="lb-images" id="lb-images"></div>
       <div class="lb-stats" id="lb-stats"></div>
     </div>
+  </div>
+</div>
+
+<!-- RULES TERM MODAL -->
+<div class="rules-term-modal" id="rules-term-modal">
+  <div class="rules-term-box">
+    <div class="rules-term-header">
+      <div class="rules-term-name" id="rules-term-title"></div>
+      <button class="rules-term-close" id="rules-term-close">✕ CLOSE</button>
+    </div>
+    <div class="rules-term-body" id="rules-term-body"></div>
+    <div class="rules-term-source" id="rules-term-source"></div>
   </div>
 </div>
 
@@ -1699,7 +2037,7 @@ function openLightbox(unit) {
       <div class="lb-stat-val">${unit.total}</div>
     </div>
     <div class="lb-limits">
-      <div class="lb-limits-title">Division Limits</div>
+      <div class="lb-limits-title">Force Size Limits</div>
       ${TIER_LABELS.map((label, i) => `
         <div class="lb-limit-row">
           <span>${label} (${TIER_RANGES[i][0]}–${TIER_RANGES[i][1] === Infinity ? '∞' : TIER_RANGES[i][1]})</span>
@@ -2396,6 +2734,690 @@ function initSavedLists() {
       }
     });
   });
+  document.getElementById('rules-term-modal').addEventListener('click', e => {
+    if (e.target.id === 'rules-term-modal') closeRulesTermModal();
+  });
+}
+
+// ============================================================
+// RULES
+// ============================================================
+
+// ── Rules data ───────────────────────────────────────────────
+// Each section has an id, title, and subsections.
+// subsections have a title and html content.
+// Certain key terms can be wrapped in <span class="rule-term" data-term="TERM_ID">word</span>
+// and clicking them opens the RULE_TERMS lookup.
+
+const RULE_TERMS = {
+  'battle_rating': {
+    name: 'Battle Rating (BR)',
+    body: `<p><strong>Battle Rating (BR)</strong> is the points value of each individual model. It represents that unit's overall combat power and is used to build balanced forces.</p>
+           <p>To find the cost of multiple models of the same unit, multiply the BR per model by the quantity you're fielding.</p>
+           <p>Both players agree on a points total before the game, then build forces that do not exceed that total.</p>`,
+    source: 'Force Building'
+  },
+  'combat_round': {
+    name: 'Combat Round',
+    body: `<p>A <strong>Combat Round</strong> is the basic unit of turns in Havok. Each round, both players alternate activating units to move and fire.</p>
+           <p>Combat Rounds continue until one side is wiped out, withdraws, or the agreed scenario conditions are met.</p>`,
+    source: 'Turn Structure'
+  },
+  'speed': {
+    name: 'Speed',
+    body: `<p>Generally lighter armed troops will be able to move faster than more heavily armed troops. However, physical size can also have an impact on the speed with which troops can move.</p>`,
+    source: 'Unit Statistics'
+  },
+  'firepower': {
+    name: 'Firepower',
+    body: `<p>This indicates the power of the troop's weapons, and takes into account their skill in using them.</p>`,
+    source: 'Unit Statistics'
+  },
+  'close_combat': {
+    name: 'Close Combat',
+    body: `<p>This indicates how effective the troops are at fighting in hand-to-hand combat.</p>`,
+    source: 'Unit Statistics'
+  },
+  'psyke': {
+    name: 'Psyke',
+    body: `<p>Strength of mind and psychic powers are indicated by a miniature's Psyke value. Some miniatures are able to attack their opponents using Psyke. These are powerful mind attacks and can be devastating even to seasoned troops.</p>`,
+    source: 'Unit Statistics'
+  },
+  'strength': {
+    name: 'Strength',
+    body: `<p>This is a measure of the troop's physical strength, as well as their ability to endure damage and hardships.</p>`,
+    source: 'Unit Statistics'
+  },
+  'armour': {
+    name: 'Armour',
+    body: `<p>The higher the Armour value the more likely a miniature will be able to survive a shot or blow that would otherwise kill. Higher armour values represent better armour being worn or troops that are just naturally tough!</p>`,
+    source: 'Unit Statistics'
+  },
+  'brigade': {
+    name: 'Brigade',
+    body: `<p><strong>Brigade</strong> is the smallest Force Size — a points limit of <strong>0–500 BR</strong>.</p>
+           <p>Each unit has a Brigade Force Size Limit: the maximum number of models of that unit type you may field at this Force Size. Some units may be unavailable at Brigade level.</p>`,
+    source: 'Force Building — Force Size'
+  },
+  'division': {
+    name: 'Division',
+    body: `<p><strong>Division</strong> is the second Force Size — a points limit of <strong>501–1000 BR</strong>.</p>
+           <p>Division games allow larger forces and may unlock higher Force Size Limits compared to Brigade games.</p>`,
+    source: 'Force Building — Force Size'
+  },
+  'corps': {
+    name: 'Corps',
+    body: `<p><strong>Corps</strong> is the third Force Size — a points limit of <strong>1001–1500 BR</strong>.</p>
+           <p>Corps games represent large-scale engagements with expanded unit allowances.</p>`,
+    source: 'Force Building — Force Size'
+  },
+  'army': {
+    name: 'Army',
+    body: `<p><strong>Army</strong> is the largest Force Size — <strong>1501+ BR</strong>.</p>
+           <p>Army games are full-scale battles. Many units have Unlimited ("U") Force Size Limits at this tier, capped only by how many models you own.</p>`,
+    source: 'Force Building — Force Size'
+  },
+  'force_size_limit': {
+    name: 'Force Size Limit',
+    body: `<p>A <strong>Force Size Limit</strong> is the maximum number of models of a given unit type you may include in your force at a given Force Size tier.</p>
+           <p>Limits vary by Force Size (Brigade / Division / Corps / Army) and are shown on each unit's data card. A limit of <strong>U</strong> means Unlimited — you may take as many as you own.</p>
+           <p>The Battle Builder enforces Force Size Limits automatically based on your chosen points total.</p>`,
+    source: 'Force Building'
+  },
+  'karn': {
+    name: 'Karn Empire',
+    body: `<p>The <strong>Karn Empire</strong> is a militaristic alien empire divided into eight Klans: Scutari, Klan Regus, Darkest Suns, Suma-Kai, Tuath, Inua, Nohmen, and Ngenes.</p>
+           <p>Karn forces are aggressive and disciplined — identifiable by red colour schemes and K-prefix unit codes. Their units tend toward raw firepower and close-combat brutality.</p>`,
+    source: 'Factions'
+  },
+  'nexus': {
+    name: 'Nexus Rebellion',
+    body: `<p>The <strong>Nexus Rebellion</strong> is the human resistance fighting back against the Karn Empire. Identified by blue colour schemes and N-prefix unit codes.</p>
+           <p>Nexus forces mix infantry versatility with armoured support, including units like The Mauler tank and the elite Fighting 47th.</p>`,
+    source: 'Factions'
+  },
+  'pteravore': {
+    name: 'Pteravore Prime Genus',
+    body: `<p>The <strong>Pteravore Prime Genus</strong> is a terrifying biological third faction — alien creatures of unknown origin with green colour schemes and P-prefix unit codes.</p>
+           <p>Several Pteravore units were never commercially released. They do not participate in standard Karn vs Nexus battles as described in the base rulebook.</p>`,
+    source: 'Factions'
+  },
+  'battle_form': {
+    name: 'Battle Form',
+    body: `<p>A <strong>Battle Form</strong> is a powerful single-model elite unit type available to both factions.</p>
+           <ul><li>Karn: <em>Karn Battle Form</em> (K-07)</li><li>Nexus: <em>The Hundred</em> (N-07)</li></ul>
+           <p>Battle Forms represent the most powerful individual combatants a faction can field — typically with very high stats across all categories but subject to strict Force Size Limits.</p>`,
+    source: 'Unit Types'
+  },
+  'unlimited': {
+    name: 'Unlimited (U)',
+    body: `<p>A Force Size Limit of <strong>U</strong> means <em>Unlimited</em> — there is no game-imposed cap on how many models of this unit you may field.</p>
+           <p>In practice, you are still limited to the number of models you physically own. The Battle Builder enforces this automatically.</p>`,
+    source: 'Force Building'
+  },
+  'force_size': {
+    name: 'Force Size & Force Size Limit',
+    body: `<p><strong>Force Size</strong> is determined by the agreed Battle Rating points limit. It governs the scale of the game and what Force Size Limits apply to each unit.</p>
+           <table style="width:100%;border-collapse:collapse;font-family:'Share Tech Mono',monospace;font-size:12px;margin-top:8px;margin-bottom:12px;">
+             <tr><th style="text-align:left;padding:6px 10px;background:#111;color:var(--gold);border:1px solid var(--border);">Force Size</th><th style="text-align:left;padding:6px 10px;background:#111;color:var(--gold);border:1px solid var(--border);">Points</th><th style="text-align:left;padding:6px 10px;background:#111;color:var(--gold);border:1px solid var(--border);">Scale</th></tr>
+             <tr><td style="padding:5px 10px;border:1px solid var(--border);">Brigade</td><td style="padding:5px 10px;border:1px solid var(--border);">0–500 BR</td><td style="padding:5px 10px;border:1px solid var(--border);">Skirmish</td></tr>
+             <tr><td style="padding:5px 10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);">Division</td><td style="padding:5px 10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);">501–1000 BR</td><td style="padding:5px 10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);">Battle</td></tr>
+             <tr><td style="padding:5px 10px;border:1px solid var(--border);">Corps</td><td style="padding:5px 10px;border:1px solid var(--border);">1001–1500 BR</td><td style="padding:5px 10px;border:1px solid var(--border);">Large Battle</td></tr>
+             <tr><td style="padding:5px 10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);">Army</td><td style="padding:5px 10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);">1501+ BR</td><td style="padding:5px 10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);">Full War</td></tr>
+           </table>
+           <p>A <strong>Force Size Limit</strong> is the maximum number of models of a given unit type you may field at the current Force Size. Limits are shown on each unit's data card. A limit of <strong>U</strong> means Unlimited — capped only by how many models you own.</p>`,
+    source: 'Force Building'
+  },
+  'force_size_limit': {
+    name: 'Force Size & Force Size Limit',
+    body: `<p><strong>Force Size</strong> is determined by the agreed Battle Rating points limit. It governs the scale of the game and what Force Size Limits apply to each unit.</p>
+           <table style="width:100%;border-collapse:collapse;font-family:'Share Tech Mono',monospace;font-size:12px;margin-top:8px;margin-bottom:12px;">
+             <tr><th style="text-align:left;padding:6px 10px;background:#111;color:var(--gold);border:1px solid var(--border);">Force Size</th><th style="text-align:left;padding:6px 10px;background:#111;color:var(--gold);border:1px solid var(--border);">Points</th><th style="text-align:left;padding:6px 10px;background:#111;color:var(--gold);border:1px solid var(--border);">Scale</th></tr>
+             <tr><td style="padding:5px 10px;border:1px solid var(--border);">Brigade</td><td style="padding:5px 10px;border:1px solid var(--border);">0–500 BR</td><td style="padding:5px 10px;border:1px solid var(--border);">Skirmish</td></tr>
+             <tr><td style="padding:5px 10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);">Division</td><td style="padding:5px 10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);">501–1000 BR</td><td style="padding:5px 10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);">Battle</td></tr>
+             <tr><td style="padding:5px 10px;border:1px solid var(--border);">Corps</td><td style="padding:5px 10px;border:1px solid var(--border);">1001–1500 BR</td><td style="padding:5px 10px;border:1px solid var(--border);">Large Battle</td></tr>
+             <tr><td style="padding:5px 10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);">Army</td><td style="padding:5px 10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);">1501+ BR</td><td style="padding:5px 10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);">Full War</td></tr>
+           </table>
+           <p>A <strong>Force Size Limit</strong> is the maximum number of models of a given unit type you may field at the current Force Size. Limits are shown on each unit's data card. A limit of <strong>U</strong> means Unlimited — capped only by how many models you own.</p>`,
+    source: 'Force Building'
+  },
+  'combat_round': {
+    name: 'Combat Round',
+    body: `<p>Each <strong>Battle Turn</strong> consists of a number of <strong>Combat Rounds</strong>.</p>
+           <p>To play a Combat Round: any player with battle cards face up rolls a dice. The player with the highest score chooses one of their battle cards. All miniatures shown on that card may move, fire and/or take part in close combat. Once finished, the battle card is turned face down and may not be used again that Battle Turn.</p>
+           <p>If any battle cards remain face up, another Combat Round must be fought. If none remain, begin a new Battle Turn.</p>`,
+    source: 'Turn Structure'
+  },
+  'battle_turn': {
+    name: 'Battle Turn',
+    body: `<p>The game is played in a series of <strong>Battle Turns</strong>. At the beginning of each new Battle Turn, all battle cards are turned face up.</p>
+           <p>Each Battle Turn consists of a number of Combat Rounds, continuing until all battle cards have been played face down.</p>`,
+    source: 'Turn Structure'
+  },
+  'unit': {
+    name: 'Unit',
+    body: `<p>A <strong>Unit</strong> consists of two or more Warriors of the same Troop Type that are deployed within an inch of another Warrior in the unit.</p>
+           <p>Units can concentrate their fire, rolling all combat dice at the same time. A unit may also split its fire between two or more targets.</p>
+           <p>Vehicles may not be placed into units.</p>`,
+    source: 'Turn Structure — Deployment'
+  },
+  'combat_ruler': {
+    name: 'Combat Ruler',
+    body: `<p>The <strong>Combat Ruler</strong> is the standard measurement tool used in Havok. It is used to measure movement distances and determine firing ranges.</p>
+           <ul>
+             <li><strong>Short Range:</strong> within the short range band — +1 combat dice when firing</li>
+             <li><strong>Medium Range:</strong> unaffected</li>
+             <li><strong>Long Range:</strong> −1 combat dice when firing</li>
+             <li><strong>Extreme Range:</strong> beyond twice the length of the combat ruler — cannot fire</li>
+           </ul>`,
+    source: 'Turn Structure — Firing'
+  },
+  'saving_throw': {
+    name: 'Saving Throw',
+    body: `<p>When a miniature is hit, the player controlling it must attempt a <strong>Saving Throw</strong> to prevent it from being destroyed.</p>
+           <p>Roll the normal dice and score equal to or less than the miniature's <strong>Armour</strong> value. If the roll is greater than the Armour value, the miniature is destroyed and removed from the game.</p>
+           <p>One saving throw must be made for each hit scored.</p>`,
+    source: 'Turn Structure — Saving Throws'
+  },
+  'cover': {
+    name: 'Cover',
+    body: `<p>A model receives the benefit of <strong>Cover</strong> if:</p>
+           <ul>
+             <li>They are being targeted through cover (cover between the two units)</li>
+             <li>They are standing in cover</li>
+             <li>A different unit is blocking line of sight</li>
+           </ul>
+           <p>Cover grants <strong>+1 to Armour</strong> for shooting saves.</p>`,
+    source: 'Turn Structure — Line of Sight'
+  },
+  'shots_on_target': {
+    name: 'Shots on Target',
+    body: `<p>When rolling combat dice, each <strong>skull</strong> or <strong>explosion</strong> rolled represents one <em>shot on target</em>.</p>
+           <p>Each explosion also allows one extra combat dice to be rolled. If that dice also shows an explosion, roll again — continue until a skull or blank is rolled.</p>
+           <p>Add up all shots on target, then divide by the target's <strong>Strength</strong> value (rounding down) to get the number of hits. One Saving Throw must be made per hit.</p>`,
+    source: 'Turn Structure — Rolling Combat Dice'
+  },
+  'house_rule': {
+    name: '[HOUSE RULE]',
+    body: `<p>A <strong>House Rule</strong> is a rule that is not part of the official Havok rulebook. These are custom rules agreed upon by the players before the game begins to enhance or clarify gameplay.</p>
+           <p>House rules are marked throughout these rules with the <strong>[HOUSE RULE]</strong> tag. Both players should agree on which house rules are in effect before the battle starts.</p>`,
+    source: 'House Rules'
+  },
+  'wounds': {
+    name: 'Wounds',
+    body: `<p>[HOUSE RULE] Wounds are calculated as Armour value −1, to a minimum of 1.</p>`,
+    source: 'Unit Statistics'
+  },
+  'special_abilities': {
+    name: 'Special Abilities',
+    body: `<p>Some miniatures have <strong>Special Abilities</strong> beyond their standard combat statistics.</p>
+           <p>If a miniature has special abilities, this is highlighted on the front of its battle card. The full rules for those abilities are shown on the back of the battle card.</p>`,
+    source: 'Unit Statistics'
+  },
+  'warrior': {
+    name: 'Warriors',
+    body: `<p><strong>Warriors</strong> is the collective rules term for individual miniatures mounted on round black bases.</p>
+           <p>Most infantry units in the game are Warriors. This term is used throughout the rules whenever a rule applies specifically to on-foot models, as distinct from Vehicles.</p>`,
+    source: 'Overview'
+  },
+  'vehicle': {
+    name: 'Vehicles',
+    body: `<p><strong>Vehicles</strong> is the collective rules term covering all Battle Forms, robots, and tanks in the game.</p>
+           <p>Certain rules apply differently to Vehicles compared to Warriors — for example, movement, targeting, and damage resolution may have specific Vehicle interactions.</p>`,
+    source: 'Overview'
+  }
+};
+
+const RULES_DATA = [
+  {
+    id: 'overview',
+    title: 'Overview',
+    subsections: [
+      {
+        title: 'What is Havok?',
+        html: `<p>Havok is a sci-fi tabletop wargame released in 1997 by Bluebird Toys. Despite its short commercial lifespan, Havok features three distinct factions, detailed unit cards, and a complete points-based battle system.</p>
+               <p>The game is set in a distant future where three forces clash across a savage universe: the militaristic 
+               <span class="rule-term" data-term="karn">Karn Empire</span>, the human 
+               <span class="rule-term" data-term="nexus">Nexus Rebellion</span>, and the biological alien terror of the 
+               <span class="rule-term" data-term="pteravore">Pteravore Prime Genus</span>.</p>
+               <p>This set contains individual miniatures on round black bases that are collectively referred to as 
+               <span class="rule-term" data-term="warrior">Warriors</span> in the rules. All Battle Forms, robots and tanks are collectively referred to as 
+               <span class="rule-term" data-term="vehicle">Vehicles</span>.</p>`
+      }
+    ]
+  },
+  {
+    id: 'force-building',
+    title: 'Force Building',
+    subsections: [
+      {
+        title: 'Choosing Your Points Total',
+        html: `<p>Before the game begins, both players agree on a 
+               <span class="rule-term" data-term="battle_rating">Battle Rating</span> points limit. 
+               The limit you choose determines the 
+               <span class="rule-term" data-term="force_size">Force Size</span> — which affects the 
+               <span class="rule-term" data-term="force_size_limit">Force Size Limits</span> for every unit:</p>
+               <table class="rules-table">
+                 <tr><th>Force Size</th><th>Points Range</th><th>Scale</th></tr>
+                 <tr><td><span class="rule-term" data-term="brigade">Brigade</span></td><td>0–500 BR</td><td>Skirmish</td></tr>
+                 <tr><td><span class="rule-term" data-term="division">Division</span></td><td>501–1000 BR</td><td>Battle</td></tr>
+                 <tr><td><span class="rule-term" data-term="corps">Corps</span></td><td>1001–1500 BR</td><td>Large Battle</td></tr>
+                 <tr><td><span class="rule-term" data-term="army">Army</span></td><td>1501+ BR</td><td>Full War</td></tr>
+               </table>`
+      },
+      {
+        title: 'Building Your Force',
+        html: `<p>Select units from your faction. Each unit has a 
+               <span class="rule-term" data-term="battle_rating">Battle Rating</span> per model — multiply by the number of models to get the total cost.</p>
+               <p>Your total force cost must not exceed the agreed points limit. You may field fewer points, but never more.</p>
+               <p>Every unit has a <span class="rule-term" data-term="force_size_limit">Force Size Limit</span> — the maximum number of models of that unit allowed at the current 
+               <span class="rule-term" data-term="force_size">Force Size</span>. 
+               A limit of <span class="rule-term" data-term="unlimited">U</span> means unlimited.</p>`
+      }
+    ]
+  },
+  {
+    id: 'statistics',
+    title: 'Unit Statistics',
+    subsections: [
+      {
+        title: 'Reading a Unit Card',
+        html: `<p>Every Havok unit has a data card listing its six combat statistics and its 
+               <span class="rule-term" data-term="battle_rating">Battle Rating</span>. The stats are:</p>
+               <table class="rules-table">
+                 <tr><th>Stat</th><th>What It Measures</th></tr>
+                 <tr><td><span class="rule-term" data-term="speed">Speed</span></td><td>Generally lighter armed troops will be able to move faster than more heavily armed troops. However, physical size can also have an impact on the speed with which troops can move.</td></tr>
+                 <tr><td><span class="rule-term" data-term="firepower">Firepower</span></td><td>This indicates the power of the troop's weapons, and takes into account their skill in using them.</td></tr>
+                 <tr><td><span class="rule-term" data-term="close_combat">Close Combat</span></td><td>This indicates how effective the troops are at fighting in hand-to-hand combat.</td></tr>
+                 <tr><td><span class="rule-term" data-term="psyke">Psyke</span></td><td>Strength of mind and psychic powers are indicated by a miniature's Psyke value. Some miniatures are able to attack their opponents using Psyke. These are powerful mind attacks and can be devastating even to seasoned troops.</td></tr>
+                 <tr><td><span class="rule-term" data-term="strength">Strength</span></td><td>This is a measure of the troop's physical strength, as well as their ability to endure damage and hardships.</td></tr>
+                 <tr><td><span class="rule-term" data-term="armour">Armour</span></td><td>The higher the Armour value the more likely a miniature will be able to survive a shot or blow that would otherwise kill. Higher armour values represent better armour being worn or troops that are just naturally tough!</td></tr>
+               </table>`
+      },
+      {
+        title: 'Battle Rating',
+        html: `<p>The <span class="rule-term" data-term="battle_rating">Battle Rating (BR)</span> on a unit card is the cost per model. If a unit card costs 25 BR and you field 4 models, that unit costs 100 BR total.</p>
+               <p>The Battle Builder calculates this automatically as you add units.</p>`
+      },
+      {
+        title: 'Special Abilities',
+        html: `<p>Some miniatures have <span class="rule-term" data-term="special_abilities">Special Abilities</span>. If a miniature has special abilities this is highlighted on the front of its battle card. The rules for these are shown on the back of the battle card.</p>`
+      },
+      {
+        title: 'Wounds',
+        html: `<p><span class="rule-term" data-term="house_rule">[HOUSE RULE]</span> <span class="rule-term" data-term="wounds">Wounds</span> are calculated as Armour value −1, to a minimum of 1.</p>`
+      }
+    ]
+  },
+  {
+    id: 'turn-structure',
+    title: 'Turn Structure',
+    subsections: [
+      {
+        title: 'Deployment',
+        html: `<p>Each player positions their force within 1 ruler length along one side of the battlefield. A player may place several of their 
+               <span class="rule-term" data-term="warrior">Warriors</span> into a 
+               <span class="rule-term" data-term="unit">Unit</span>. A unit consists of two or more Warriors of the same Troop Type that are deployed within an inch of another Warrior in the unit. 
+               <span class="rule-term" data-term="vehicle">Vehicles</span> may not be placed into units.</p>`
+      },
+      {
+        title: 'Battle Turn',
+        html: `<p>The game is played in a series of 
+               <span class="rule-term" data-term="battle_turn">Battle Turns</span>. At the beginning of a new Battle Turn, all battle cards are turned face up.</p>
+               <p>Each Battle Turn consists of a number of 
+               <span class="rule-term" data-term="combat_round">Combat Rounds</span>.</p>`
+      },
+      {
+        title: 'Playing a Combat Round',
+        html: `<ul>
+                 <li>Any player who has battle cards face up must roll a normal dice</li>
+                 <li>The player with the highest score chooses one of their battle cards</li>
+                 <li>All miniatures shown on the chosen battle card may move, fire and/or take part in close combat</li>
+                 <li>Once the player has finished with all these miniatures, the battle card is turned over. This battle card may not be used again during this Battle Turn</li>
+                 <li>If there are battle cards remaining face up on the battlefield then another <span class="rule-term" data-term="combat_round">Combat Round</span> must be fought</li>
+                 <li>If there are no battle cards remaining face up then begin a new <span class="rule-term" data-term="battle_turn">Battle Turn</span></li>
+               </ul>`
+      },
+      {
+        title: 'Moving',
+        html: `<p>A miniature's <span class="rule-term" data-term="speed">Speed</span> is shown on its battle card. This indicates the distance the miniature may be moved. The 
+               <span class="rule-term" data-term="combat_ruler">Combat Ruler</span> is used to measure movement.</p>
+               <p>A miniature may move less than the maximum distance allowed if desired. When moving a miniature you may not:</p>
+               <ul>
+                 <li>Move directly through other Warriors, ruins, or Vehicles</li>
+                 <li>Split its movement before and after engaging in combat, unless allowed to by a 
+                 <span class="rule-term" data-term="special_abilities">Special Ability</span> shown on the back of the miniature's battle card</li>
+               </ul>
+               <p>A miniature may use its movement to get into base contact with an enemy. A unit that moves like this cannot fire.</p>
+               <p><span class="rule-term" data-term="house_rule">[HOUSE RULE]</span> A unit can move an additional 1 instead of shooting but cannot end its move in combat.</p>
+               <p><em>Example: A miniature with a Speed value of 3 may not make a single move, fire and then make a further two moves.</em></p>`
+      }
+    ]
+  },
+  {
+    id: 'firing',
+    title: 'Firing',
+    subsections: [
+      {
+        title: 'Firing',
+        html: `<p>When firing you must first nominate which miniatures are firing and their target. This may be an individual 
+               <span class="rule-term" data-term="warrior">Warrior</span>, a 
+               <span class="rule-term" data-term="unit">Unit</span> of Warriors or a single 
+               <span class="rule-term" data-term="vehicle">Vehicle</span>.</p>`
+      },
+      {
+        title: 'Range',
+        html: `<p>Firing is modified depending on the range of the shot, measured with the 
+               <span class="rule-term" data-term="combat_ruler">Combat Ruler</span>:</p>
+               <table class="rules-table">
+                 <tr><th>Range Band</th><th>Effect</th></tr>
+                 <tr><td>Short Range</td><td>Roll one extra combat dice</td></tr>
+                 <tr><td>Medium Range</td><td>Unaffected</td></tr>
+                 <tr><td>Long Range</td><td>Roll one less combat dice</td></tr>
+                 <tr><td>Extreme Range (beyond 2× ruler)</td><td>Cannot fire</td></tr>
+               </table>
+               <p><span class="rule-term" data-term="house_rule">[HOUSE RULE]</span> All rolls are to a minimum of 1 per miniature in the unit.</p>
+               <p><em>Example: A miniature has a <span class="rule-term" data-term="firepower">Firepower</span> of 2 and normally rolls two dice when firing. If firing at a target within short range the player rolls three dice. If firing at a target at long range then only one dice is rolled. The miniature cannot fire at a target at extreme range.</em></p>`
+      },
+      {
+        title: 'Line of Sight',
+        html: `<p>In order to fire at a target it must be visible. Miniatures may only fire at other miniatures they can 'see'. Players must judge for themselves if one miniature can 'see' another to fire at it. If there is a dispute regarding the visibility, randomly roll to decide.</p>
+               <p><span class="rule-term" data-term="house_rule">[HOUSE RULE]</span> A model receives the benefit of 
+               <span class="rule-term" data-term="cover">Cover</span> if they're being targeted through cover (cover between the two units), or they're standing in cover, or a different unit is blocking line of sight. Cover grants +1 to 
+               <span class="rule-term" data-term="armour">Armour</span> for shooting saves.</p>`
+      },
+      {
+        title: 'Rolling Combat Dice',
+        html: `<p>Roll the total number of combat dice for the attack being made.</p>
+               <p>A <span class="rule-term" data-term="unit">Unit</span> of Warriors may concentrate their fire. This allows the player to roll all the combat dice at the same time. Therefore, a unit of three Warriors, with a 
+               <span class="rule-term" data-term="firepower">Firepower</span> value of 2, would roll six combat dice if they fired as a unit. A unit may split its fire between two or more targets.</p>
+               <p><span class="rule-term" data-term="shots_on_target">Shots on Target</span> — Each skull or explosion rolled represents one shot on target. Each explosion rolled also allows one extra combat dice to be rolled. If this dice roll also results in an explosion then another dice may be rolled, and so on, until either a skull or a blank face is rolled.</p>
+               <p>You may need to roll more combat dice than you have available. If this is the case roll some dice twice, keeping a track of any shots on target rolled.</p>
+               <div class="rules-subsection-title">Number of Hits Scored</div>
+               <p>Add up the number of shots on target rolled and divide this by the target's 
+               <span class="rule-term" data-term="strength">Strength</span>, any remainder is ignored. This is the number of hits scored.</p>
+               <p><em>Example: A player rolls six combat dice. Three of the dice are blank, two show skulls and one an explosion. The player has scored three shots on target. The explosion allows him to roll one more combat dice. He rolls another explosion and is therefore allowed to roll another combat dice. This time he rolls a skull. The total number of shots on target rolled equals five. The target has a Strength value of 2, therefore two hits are scored; 5÷2=2.5, giving two hits rounded down.</em></p>`
+      },
+      {
+        title: 'Saving Throws',
+        html: `<p>When a miniature is hit the player controlling it must attempt to make a 
+               <span class="rule-term" data-term="saving_throw">Saving Throw</span> to prevent it from being destroyed and removed from the game. One saving throw must be made for each hit.</p>
+               <p>In order to make the saving throw the player must roll the normal dice and score equal to, or less than, the target miniature's 
+               <span class="rule-term" data-term="armour">Armour</span> value, as shown on its battle card. If the number rolled is greater than the miniature's Armour value it is either wounded or destroyed and removed from the game.</p>
+               <p><span class="rule-term" data-term="house_rule">[HOUSE RULE]</span> Infantry models with a <span class="rule-term" data-term="battle_rating">Battle Rating</span> of 40+ can re-roll failed saves.</p>`
+      },
+      {
+        title: 'Destroyed Vehicles',
+        html: `<p>If a 
+               <span class="rule-term" data-term="vehicle">Vehicle</span> is destroyed, remove it from the game. Any 
+               <span class="rule-term" data-term="warrior">Warrior</span> that was on top of, or inside the vehicle when it was destroyed, must make a single 
+               <span class="rule-term" data-term="saving_throw">Saving Throw</span>. If this saving throw fails then the Warrior is destroyed and removed from the game too.</p>`
+      }
+    ]
+  },
+  {
+    id: 'combat',
+    title: 'Combat',
+    subsections: [
+      {
+        title: 'Close Combat',
+        html: `<p>Close combat is when miniatures engage in hand-to-hand combat. 
+               <span class="rule-term" data-term="vehicle">Vehicles</span> may participate in hand-to-hand combat with other Vehicles or 
+               <span class="rule-term" data-term="warrior">Warriors</span>. Close combat may only be fought if an attacking miniature is in direct contact with an enemy miniature. A player may attack a single enemy miniature in close combat with more than one of their miniatures. Alternatively, a single miniature may be moved so as to attack more than one enemy miniature.</p>
+               <div class="rules-subsection-title">Engagement Range</div>
+               <p><span class="rule-term" data-term="house_rule">[HOUSE RULE]</span> For deciding who can fight in a combat. Engagement range is any friendly miniatures in the same unit that's within 1/2 move from a friendly model in base with an enemy.</p>`
+      },
+      {
+        title: 'Resolving Close Combat',
+        html: `<p>Both players roll a number of combat dice equal to the 
+               <span class="rule-term" data-term="close_combat">Close Combat</span> value, shown on the miniature's battle card. The player that rolls the most 
+               <span class="rule-term" data-term="shots_on_target">shots on target</span> wins. <span class="rule-term" data-term="house_rule">[HOUSE RULE]</span> The losing unit must make saving throws, equal to the difference of successful shots on target. If the saving throw fails the miniature is wounded or destroyed and removed from the game.</p>
+               <p>If both players roll the same number of shots on target then they must both make a single saving throw for their miniature. If neither player rolls any shots on target then neither player needs to make a saving throw.</p>`
+      },
+      {
+        title: 'Strength Bonus in Close Combat',
+        html: `<p>Some miniatures are stronger than others and this gives them an advantage in hand-to-hand combat. Both players compare the 
+               <span class="rule-term" data-term="strength">Strength</span> value of the miniatures engaged. If one has a higher value then the player controlling that miniature may roll one extra combat dice for each additional point of Strength.</p>
+               <p><em>Example: A Nexus 47th Line warrior attacks a Karn Form Warrior in close combat. The Nexus player rolls two dice for the 47th Line warrior as his Close Combat value is 2. The Karn player rolls three dice as the Form Warrior's Close Combat value is 3. However, in comparing Strength values, the Form Warrior has a Strength of 4, compared to the 47th Line warrior's Strength of 2. Therefore, the Form Warrior gets two additional dice, bringing its total number to be rolled in the combat to five.</em></p>`
+      },
+      {
+        title: 'Multiple Combats',
+        html: `<p>Fighting several opponents will drain a warrior's strength. If a miniature has already fought one or more bouts of close combat then that miniature's 
+               <span class="rule-term" data-term="strength">Strength</span> value is considered to be one less for each bout of close combat already fought in this battle round.</p>`
+      }
+    ]
+  },
+  {
+    id: 'psyke-combat',
+    title: 'Psyke Combat',
+    subsections: [
+      {
+        title: 'Psyke Attacks',
+        html: `<p>Some <span class="rule-term" data-term="warrior">Warriors</span> are able to attack using their telepathic skills. Miniatures that are able to attack in this way have 
+               <span class="rule-term" data-term="psyke">Psyke</span> shown in red on their battle card.</p>
+               <ul>
+                 <li>A miniature may only attack other miniatures with a Psyke attack if they are within short range</li>
+                 <li>A miniature does not have to have a line of sight in order to make a Psyke attack</li>
+               </ul>`
+      },
+      {
+        title: 'Resolving Psyke Attacks',
+        html: `<p>Both players roll the number of combat dice equal to the 
+               <span class="rule-term" data-term="psyke">Psyke</span> value, as shown on the miniature's battle card.</p>
+               <p>The player that scores the most 
+               <span class="rule-term" data-term="shots_on_target">shots on target</span> wins the combat. If both players roll the same number of shots on target then neither needs to make a saving throw as the attack has failed.</p>`
+      },
+      {
+        title: 'Saving Throws for Psyke Attacks',
+        html: `<p><span class="rule-term" data-term="house_rule">[HOUSE RULE]</span> If a Psyker wins the combat, they ignore the wounds of the enemy and auto kill on a 2+ (the 
+               <span class="rule-term" data-term="armour">Armour</span> value is always considered to be one, regardless of the Armour value shown for the miniature on its battle card). This doesn't affect 
+               <span class="rule-term" data-term="vehicle">Vehicles</span> or infantry models with a 
+               <span class="rule-term" data-term="battle_rating">Battle Rating</span> of 40+. If the Psyker loses the combat, they themselves take wounds as normal (unless the enemy unit is also a Psyker).</p>`
+      }
+    ]
+  },
+  {
+    id: 'unit-types',
+    title: 'Unit Types',
+    subsections: [
+      {
+        title: 'Infantry',
+        html: `<p>The backbone of every force. Infantry units are fielded in multiples and make up the bulk of most rosters. 
+               They have moderate stats and manageable <span class="rule-term" data-term="battle_rating">Battle Ratings</span>.</p>
+               <p>Examples: Karn Troopers (K-01), Nexus Troopers (N-01), Darkest Suns (K-02).</p>`
+      },
+      {
+        title: 'Elite & Specialist Units',
+        html: `<p>Elite units have higher stats but cost more BR and often have tighter 
+               <span class="rule-term" data-term="force_size_limit">Force Size Limits</span>. 
+               They're powerful force multipliers but rare on the battlefield.</p>
+               <p>Examples: Suma-Kai (K-04), Nexus Brotherhood (N-04), Nexus Assault Troops (N-05).</p>`
+      },
+      {
+        title: 'Battle Forms',
+        html: `<p>Each faction has a single <span class="rule-term" data-term="battle_form">Battle Form</span> — a monstrous or elite super-unit representing the pinnacle of that faction's martial power.</p>
+               <ul>
+                 <li><strong>Karn:</strong> Karn Battle Form (K-07)</li>
+                 <li><strong>Nexus:</strong> Nexus Battle Form 'The Hundred' (N-07)</li>
+               </ul>
+               <p>Battle Forms are extremely expensive in BR but devastating in combat. Force Size Limits are typically very low — often 1 per force.</p>`
+      },
+      {
+        title: 'Vehicles & Heavy Units',
+        html: `<p>Both factions can field armoured vehicles with heavy firepower and high 
+               <span class="rule-term" data-term="armour">Armour</span> values. 
+               Vehicles sacrifice <span class="rule-term" data-term="close_combat">Close Combat</span> ability for ranged dominance.</p>
+               <ul>
+                 <li><strong>Karn:</strong> Karn Ground Attack Vehicle 'Banshee' (K-09)</li>
+                 <li><strong>Nexus:</strong> Nexus Tank 'The Mauler' (N-06), Nexus Heavy Assault Tank 'The Hammer' (N-09)</li>
+               </ul>`
+      },
+      {
+        title: 'Mercenaries',
+        html: `<p>The Karn faction can field <strong>Borkian Mercenaries</strong> (K-06) — independent warriors who fight for payment rather than Klan loyalty.</p>
+               <p>Mercenaries follow normal force-building rules and count toward your 
+               <span class="rule-term" data-term="battle_rating">Battle Rating</span> total like any other unit.</p>`
+      }
+    ]
+  },
+  {
+    id: 'factions',
+    title: 'Factions',
+    subsections: [
+      {
+        title: 'Karn Empire',
+        html: `<p>The <span class="rule-term" data-term="karn">Karn Empire</span> is a vast militaristic alien empire divided into eight Klans, each with its own culture and fighting style. 
+               Karn forces are aggressive, well-armed, and ruthless.</p>
+               <p><strong>Klans:</strong> Scutari, Klan Regus, Darkest Suns, Suma-Kai, Tuath, Inua, Nohmen, Ngenes.</p>
+               <p>Unit codes begin with <strong>K-</strong>. Colour scheme: <strong style="color:var(--karn-lt)">Red</strong>.</p>`
+      },
+      {
+        title: 'Nexus Rebellion',
+        html: `<p>The <span class="rule-term" data-term="nexus">Nexus Rebellion</span> is humanity's organised resistance against Karn domination. 
+               Nexus forces combine disciplined infantry with powerful armoured support.</p>
+               <p>Unit codes begin with <strong>N-</strong>. Colour scheme: <strong style="color:var(--nexus-lt)">Blue</strong>.</p>`
+      },
+      {
+        title: 'Pteravore Prime Genus',
+        html: `<p>The <span class="rule-term" data-term="pteravore">Pteravore Prime Genus</span> is a biological alien faction — terrifying creatures of unknown origin.</p>
+               <p>Unit codes begin with <strong>P-</strong>. Colour scheme: <strong style="color:#27ae60">Green</strong>.</p>
+               <p><em>Note: Several Pteravore units were never commercially released (P-02, P-03).</em></p>`
+      }
+    ]
+  }
+];
+
+// ── Render Rules ──────────────────────────────────────────────
+function initRules() {
+  const toc     = document.getElementById('rules-toc');
+  const content = document.getElementById('rules-content');
+
+  // Build TOC
+  RULES_DATA.forEach(section => {
+    const link = document.createElement('a');
+    link.className   = 'rules-toc-link';
+    link.textContent = section.title;
+    link.addEventListener('click', () => {
+      document.getElementById(`rules-sec-${section.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    toc.appendChild(link);
+  });
+
+  // Build content
+  RULES_DATA.forEach(section => {
+    const sec = document.createElement('div');
+    sec.className = 'rules-section';
+    sec.id        = `rules-sec-${section.id}`;
+
+    let html = `<div class="rules-section-title">${section.title}</div>`;
+
+    section.subsections.forEach(sub => {
+      html += `<div class="rules-subsection">`;
+      if (sub.title) {
+        html += `<div class="rules-subsection-title">${sub.title}</div>`;
+      }
+      html += `<div class="rules-text">${sub.html}</div>`;
+      html += `</div>`;
+    });
+
+    sec.innerHTML = html;
+    content.appendChild(sec);
+  });
+
+  // Wire up rule-term clicks (event delegation on content)
+  content.addEventListener('click', e => {
+    const term = e.target.closest('.rule-term');
+    if (!term) return;
+    openRulesTermModal(term.dataset.term);
+  });
+
+  // Search
+  const searchInput = document.getElementById('rules-search');
+  const clearBtn    = document.getElementById('rules-search-clear');
+  const matchCount  = document.getElementById('rules-match-count');
+
+  searchInput.addEventListener('input', () => rulesSearch(searchInput.value.trim()));
+  clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    rulesSearch('');
+  });
+
+  // Term modal close
+  document.getElementById('rules-term-close').addEventListener('click', closeRulesTermModal);
+}
+
+function rulesSearch(query) {
+  const sections  = document.querySelectorAll('.rules-section');
+  const matchCount = document.getElementById('rules-match-count');
+
+  // Remove existing highlights
+  document.querySelectorAll('mark.rules-hl').forEach(m => {
+    m.outerHTML = m.textContent;
+  });
+
+  if (!query) {
+    sections.forEach(s => s.classList.remove('hidden'));
+    matchCount.textContent = '';
+    return;
+  }
+
+  const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  let total = 0;
+
+  sections.forEach(sec => {
+    // Search within text nodes of rules-text and titles
+    const textEls = sec.querySelectorAll('.rules-text, .rules-section-title, .rules-subsection-title');
+    let sectionMatches = 0;
+
+    textEls.forEach(el => {
+      // Walk text nodes only (skip nested rule-term elements to not break them)
+      highlightTextNodes(el, re, count => { sectionMatches += count; });
+    });
+
+    if (sectionMatches > 0) {
+      sec.classList.remove('hidden');
+      total += sectionMatches;
+    } else {
+      sec.classList.add('hidden');
+    }
+  });
+
+  matchCount.textContent = total > 0 ? `${total} match${total === 1 ? '' : 'es'}` : 'No matches';
+}
+
+function highlightTextNodes(el, re, countCb) {
+  let count = 0;
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+  const nodes  = [];
+  let node;
+  while ((node = walker.nextNode())) nodes.push(node);
+
+  nodes.forEach(textNode => {
+    // Don't highlight inside rule-term spans (breaks click handlers)
+    if (textNode.parentElement.classList.contains('rule-term')) return;
+    const original = textNode.textContent;
+    const matches  = original.match(re);
+    if (!matches) return;
+    count += matches.length;
+    const span = document.createElement('span');
+    span.innerHTML = original.replace(re, m => `<mark class="rules-hl">${m}</mark>`);
+    textNode.parentNode.replaceChild(span, textNode);
+  });
+
+  countCb(count);
+}
+
+function openRulesTermModal(termId) {
+  const term = RULE_TERMS[termId];
+  if (!term) return;
+  document.getElementById('rules-term-title').textContent  = term.name;
+  document.getElementById('rules-term-body').innerHTML     = term.body;
+  document.getElementById('rules-term-source').textContent = `§ ${term.source}`;
+  document.getElementById('rules-term-modal').classList.add('open');
+}
+
+function closeRulesTermModal() {
+  document.getElementById('rules-term-modal').classList.remove('open');
 }
 
 // ============================================================
@@ -2416,6 +3438,7 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 // ============================================================
 initConfig();
 initSavedLists();
+initRules();
 loadSheet();
 </script>
 
