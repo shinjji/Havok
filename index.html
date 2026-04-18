@@ -1238,7 +1238,45 @@ body::before {
   gap: 24px;
   align-items: start;
 }
-@media (max-width: 800px) { .rules-layout { grid-template-columns: 1fr; } }
+
+@media (max-width: 800px) {
+  .rules-layout { grid-template-columns: 1fr; }
+  .rules-toc-mobile { display: none; }
+  .rules-content { padding-top: 0; }
+}
+
+.rules-toc-mobile {
+  display: none;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 8px 14px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: #0a0a0a;
+  border-bottom: 2px solid var(--karn);
+}
+.rules-toc-mobile::-webkit-scrollbar { display: none; }
+
+.rules-toc-mobile-link {
+  font-family: 'Black Ops One', cursive;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--muted);
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.rules-toc-mobile-link:hover { color: var(--karn-lt); border-color: var(--karn); }
 
 .rules-toc {
   position: sticky;
@@ -1246,6 +1284,10 @@ body::before {
   background: var(--card);
   border: 2px solid var(--border);
   padding: 16px;
+}
+
+@media (max-width: 800px) {
+  .rules-toc { position: static; }
 }
 
 .rules-toc-title {
@@ -1669,6 +1711,8 @@ mark.rules-hl {
       <button class="rules-search-clear" id="rules-search-clear">CLEAR</button>
       <div class="rules-match-count" id="rules-match-count"></div>
     </div>
+
+    <div class="rules-toc-mobile" id="rules-toc-mobile"></div>
 
     <div class="rules-layout">
       <!-- Table of Contents -->
@@ -3289,8 +3333,9 @@ const RULES_DATA = [
 
 // ── Render Rules ──────────────────────────────────────────────
 function initRules() {
-  const toc     = document.getElementById('rules-toc');
-  const content = document.getElementById('rules-content');
+  const toc       = document.getElementById('rules-toc');
+  const tocMobile = document.getElementById('rules-toc-mobile');
+  const content   = document.getElementById('rules-content');
 
   // Build TOC
   RULES_DATA.forEach(section => {
@@ -3301,6 +3346,14 @@ function initRules() {
       document.getElementById(`rules-sec-${section.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
     toc.appendChild(link);
+
+    const mLink = document.createElement('a');
+    mLink.className   = 'rules-toc-mobile-link';
+    mLink.textContent = section.title;
+    mLink.addEventListener('click', () => {
+      document.getElementById(`rules-sec-${section.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    tocMobile.appendChild(mLink);
   });
 
   // Build content
