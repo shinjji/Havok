@@ -1752,7 +1752,7 @@ mark.rules-hl {
 
       <div class="form-group">
         <label class="form-label">Sheet Tab Name</label>
-        <input class="form-input" type="text" id="cfg-tab-name" placeholder="Sheet1">
+        <input class="form-input" type="text" id="cfg-tab-name" placeholder="Havok" value="Havok">
       </div>
 
       <div class="config-section-title" style="margin-top:24px;">List Saving (Write Access)</div>
@@ -1898,7 +1898,7 @@ async function loadSheet() {
     return;
   }
 
-  const tab   = cfg.tabName || 'Sheet1';
+  const tab   = cfg.tabName || 'Havok';
   const range = encodeURIComponent(`${tab}!A2:N200`);
   const url   = `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}/values/${range}?key=${cfg.apiKey}`;
 
@@ -2411,7 +2411,7 @@ function initConfig() {
   document.getElementById('cfg-save-btn').addEventListener('click', async () => {
     const sheetId     = document.getElementById('cfg-sheet-id').value.trim();
     const apiKey      = document.getElementById('cfg-api-key').value.trim();
-    const tabName     = document.getElementById('cfg-tab-name').value.trim() || 'Sheet1';
+    const tabName     = document.getElementById('cfg-tab-name').value.trim() || 'Havok';
     const serviceJson = document.getElementById('cfg-service-json').value.trim();
     const status      = document.getElementById('cfg-status');
 
